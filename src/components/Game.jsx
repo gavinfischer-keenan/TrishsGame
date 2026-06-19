@@ -36,7 +36,7 @@ const Game = ({ gridSize, mode, onExit }) => {
         // Basic line clear points
         pointsGained += clearedLines * 100 * gridSize; 
         
-        if (mode === 'Color Coordinated' && bonusColorMatches > 0) {
+        if ((mode === 'Color Coordinated' || mode === 'Colorfully rotate on this') && bonusColorMatches > 0) {
            pointsGained += bonusColorMatches * 500 * gridSize;
         }
       }
@@ -82,7 +82,7 @@ const Game = ({ gridSize, mode, onExit }) => {
   };
 
   const rotateBlockInTray = (index) => {
-    if (mode !== 'Rotate on this') return;
+    if (mode !== 'Colorfully rotate on this') return;
     setAvailableBlocks(prev => {
       const next = [...prev];
       if (next[index]) {
@@ -102,7 +102,7 @@ const Game = ({ gridSize, mode, onExit }) => {
     dragOffsetX,
     dragOffsetY,
     visualShiftY
-  } = useDragAndDrop(gridSize, handleBlockDrop, mode === 'Rotate on this');
+  } = useDragAndDrop(gridSize, handleBlockDrop, mode === 'Colorfully rotate on this');
 
   useEffect(() => {
     // Update board rect on mount and resize for accurate drag coordinates

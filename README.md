@@ -8,9 +8,10 @@ Welcome to **BrickSmack** (also known as Trish's Game) — a premium, modern puz
 
 1. **Play Normal**: The classic block puzzle experience. Drag blocks from the tray onto the grid to form complete horizontal rows or vertical columns to clear them and score points.
 2. **Color Coordinated**: In this mode, clearing lines of the same color awards massive color-match point multipliers.
-3. **Rotate on this**: Introduces shape rotation. 
+3. **Colorfully rotate on this**: Adds block rotation *and* rewards color coordination bonuses.
    - **Keyboard Rotation (Desktop)**: Press the `Spacebar` while dragging a block in mid-air to rotate it 90° clockwise. The mouse remains locked to the exact same relative position.
    - **Tray Button Rotation (Mobile & Desktop)**: Click or tap the circular arrow overlay (↻) on any block in the tray to rotate it in place before dragging.
+   - **Color Clear Bonus**: Completing a row or column using cells of all the same color awards the same high score bonus as in the Color Coordinated mode.
 
 ---
 

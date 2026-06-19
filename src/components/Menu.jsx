@@ -32,8 +32,8 @@ const Menu = ({ onStartGame }) => {
           <button className="btn-mode bonus" onClick={() => onStartGame('Color Coordinated', gridSize)}>
             Color Coordinated
           </button>
-          <button className="btn-mode rotate" onClick={() => onStartGame('Rotate on this', gridSize)}>
-            Rotate on this
+          <button className="btn-mode rotate" onClick={() => onStartGame('Colorfully rotate on this', gridSize)}>
+            Colorfully rotate on this
           </button>
         </div>
       </div>

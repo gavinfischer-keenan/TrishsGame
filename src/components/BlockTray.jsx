@@ -12,7 +12,7 @@ const BlockTray = ({ blocks, onDragStart, draggedSourceIndex, onRotateBlock, mod
 
         return (
           <div key={block.id} className="tray-slot">
-            {mode === 'Rotate on this' && (
+            {mode === 'Colorfully rotate on this' && (
               <button 
                 className="btn-rotate-tray" 
                 onClick={(e) => {
