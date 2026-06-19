@@ -1,40 +1,24 @@
 import { useState } from 'react';
-import Menu from './components/Menu';
-import Game from './components/Game';
+import HomeScreen from './components/HomeScreen';
+import BrickSmack from './games/bricksmack/BrickSmack';
+import BuildMeARiver from './games/buildmeariver/BuildMeARiver';
 
 function App() {
-  const [gameState, setGameState] = useState({
-    isPlaying: false,
-    mode: null,
-    gridSize: 8
-  });
+  const [currentGame, setCurrentGame] = useState(null); // null | 'bricksmack' | 'buildmeariver'
 
-  const handleStartGame = (mode, gridSize) => {
-    setGameState({
-      isPlaying: true,
-      mode,
-      gridSize
-    });
-  };
-
-  const handleExitGame = () => {
-    setGameState({
-      isPlaying: false,
-      mode: null,
-      gridSize: 8
-    });
-  };
+  const handleSelectGame = (gameKey) => setCurrentGame(gameKey);
+  const handleExitGame = () => setCurrentGame(null);
 
   return (
     <div className="app-root">
-      {gameState.isPlaying ? (
-        <Game 
-          mode={gameState.mode} 
-          gridSize={gameState.gridSize} 
-          onExit={handleExitGame} 
-        />
-      ) : (
-        <Menu onStartGame={handleStartGame} />
+      {currentGame === 'bricksmack' && (
+        <BrickSmack onExit={handleExitGame} />
+      )}
+      {currentGame === 'buildmeariver' && (
+        <BuildMeARiver onExit={handleExitGame} />
+      )}
+      {!currentGame && (
+        <HomeScreen onSelectGame={handleSelectGame} />
       )}
     </div>
   );
