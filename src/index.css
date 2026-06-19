@@ -255,7 +255,23 @@ body {
   border-radius: 8px;
 }
 
-/* Board */
+.score-container {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-board {
+  text-align: center;
+}
+
+.score-board.best .score-value {
+  background: linear-gradient(to bottom, #ffe066, #ffa502);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(255, 165, 2, 0.25);
+}
 .board-wrapper {
   flex: 1;
   display: flex;

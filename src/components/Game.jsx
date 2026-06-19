@@ -13,6 +13,15 @@ const Game = ({ gridSize, mode, onExit }) => {
   
   const boardRef = useRef(null);
 
+  const highScoreKey = `bricksmack_highscore_${gridSize}_${mode.replace(/\s+/g, '_')}`;
+  const [highScore, setHighScore] = useState(() => {
+    try {
+      return parseInt(localStorage.getItem(highScoreKey) || '0', 10);
+    } catch {
+      return 0;
+    }
+  });
+
   const handleBlockDrop = (block, sourceIndex, targetRow, targetCol) => {
     if (gameOver) return;
 
@@ -27,13 +36,23 @@ const Game = ({ gridSize, mode, onExit }) => {
         // Basic line clear points
         pointsGained += clearedLines * 100 * gridSize; 
         
-        if (mode === 'Bonus by Color' && bonusColorMatches > 0) {
+        if (mode === 'Color Coordinated' && bonusColorMatches > 0) {
            pointsGained += bonusColorMatches * 500 * gridSize;
         }
       }
 
       setGrid(newGrid);
-      setScore(s => s + pointsGained);
+      const newScore = score + pointsGained;
+      setScore(newScore);
+
+      if (newScore > highScore) {
+        setHighScore(newScore);
+        try {
+          localStorage.setItem(highScoreKey, newScore.toString());
+        } catch {
+          // Ignore storage errors
+        }
+      }
 
       // Remove the used block
       const newAvailableBlocks = [...availableBlocks];
@@ -101,9 +120,15 @@ const Game = ({ gridSize, mode, onExit }) => {
     <div className="game-container">
       <header className="game-header">
         <button className="btn-exit" onClick={onExit}>&larr; Exit</button>
-        <div className="score-board">
-          <div className="score-label">SCORE</div>
-          <div className="score-value">{score}</div>
+        <div className="score-container">
+          <div className="score-board">
+            <div className="score-label">SCORE</div>
+            <div className="score-value">{score}</div>
+          </div>
+          <div className="score-board best">
+            <div className="score-label">BEST</div>
+            <div className="score-value">{highScore}</div>
+          </div>
         </div>
         <div className="mode-label">{mode} Mode</div>
       </header>
