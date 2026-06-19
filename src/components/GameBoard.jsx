@@ -1,5 +1,53 @@
 
 const GameBoard = ({ boardRef, grid, gridSize, hoveredCell, draggedBlock, canPlace }) => {
+  // Determine which rows and columns will be cleared if placed
+  const rowsToFlash = new Set();
+  const colsToFlash = new Set();
+
+  if (draggedBlock && hoveredCell && canPlace) {
+    // Check rows
+    for (let r = 0; r < gridSize; r++) {
+      let isRowCompleted = true;
+      for (let c = 0; c < gridSize; c++) {
+        const isFilled = grid[r][c] !== null;
+        const blockR = r - hoveredCell.row;
+        const blockC = c - hoveredCell.col;
+        const isCovered = blockR >= 0 && blockR < draggedBlock.height &&
+                          blockC >= 0 && blockC < draggedBlock.width &&
+                          draggedBlock.grid[blockR][blockC] === 1;
+
+        if (!isFilled && !isCovered) {
+          isRowCompleted = false;
+          break;
+        }
+      }
+      if (isRowCompleted) {
+        rowsToFlash.add(r);
+      }
+    }
+
+    // Check columns
+    for (let c = 0; c < gridSize; c++) {
+      let isColCompleted = true;
+      for (let r = 0; r < gridSize; r++) {
+        const isFilled = grid[r][c] !== null;
+        const blockR = r - hoveredCell.row;
+        const blockC = c - hoveredCell.col;
+        const isCovered = blockR >= 0 && blockR < draggedBlock.height &&
+                          blockC >= 0 && blockC < draggedBlock.width &&
+                          draggedBlock.grid[blockR][blockC] === 1;
+
+        if (!isFilled && !isCovered) {
+          isColCompleted = false;
+          break;
+        }
+      }
+      if (isColCompleted) {
+        colsToFlash.add(c);
+      }
+    }
+  }
+
   return (
     <div 
       ref={boardRef}
@@ -33,6 +81,10 @@ const GameBoard = ({ boardRef, grid, gridSize, hoveredCell, draggedBlock, canPla
           if (cellColor) className += ' filled';
           else if (isShadow) {
             className += canPlace ? ' shadow-valid' : ' shadow-invalid';
+          }
+
+          if (rowsToFlash.has(rIndex) || colsToFlash.has(cIndex)) {
+            className += ' will-clear';
           }
 
           return (
