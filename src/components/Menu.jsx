@@ -13,7 +13,7 @@ const Menu = ({ onStartGame }) => {
         <div className="settings-panel">
           <h3>Select Grid Size</h3>
           <div className="size-selector">
-            {[8, 16, 32, 64].map(size => (
+            {[8, 16].map(size => (
               <button 
                 key={size}
                 className={`btn-size ${gridSize === size ? 'active' : ''}`}

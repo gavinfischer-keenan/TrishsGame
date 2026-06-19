@@ -19,8 +19,6 @@ Welcome to **BrickSmack** (also known as Trish's Game) — a premium, modern puz
 * **Multi-Size Grid System**: Choose your board scale directly from the main menu:
   - **8x8** (Standard)
   - **16x16** (Expanded)
-  - **32x32** (Expert)
-  - **64x64** (Insane)
 * **Custom Drag and Drop Hook**: Built entirely using pointer events, bypassing standard HTML5 drag-and-drop issues. 
 * **Precision Hover & Snap Shadows**: Shows exactly where the block will land before releasing, colored dynamically according to placement validity (valid vs. invalid placement colors).
 * **Obstruct-Free Dragging**: The picked-up piece is shifted vertically above your pointer and rendered at `0.6` opacity, leaving your view of the board completely clear.
