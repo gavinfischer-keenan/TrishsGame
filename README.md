@@ -1,32 +1,37 @@
-# BrickSmack (Trish's Game)
+# Trish's Games
 
-Welcome to **BrickSmack** (also known as Trish's Game) — a premium, modern puzzle game inspired by block clearing puzzles, crafted with React, Vite, and custom Vanilla CSS.
-
----
-
-## 🎮 Game Modes
-
-1. **Play Normal**: The classic block puzzle experience. Drag blocks from the tray onto the grid to form complete horizontal rows or vertical columns to clear them and score points.
-2. **Color Coordinated**: In this mode, clearing lines of the same color awards massive color-match point multipliers.
-3. **Colorfully rotate on this**: Adds block rotation *and* rewards color coordination bonuses.
-   - **Keyboard Rotation (Desktop)**: Press the `Spacebar` while dragging a block in mid-air to rotate it 90° clockwise. The mouse remains locked to the exact same relative position.
-   - **Tray Button Rotation (Mobile & Desktop)**: Click or tap the circular arrow overlay (↻) on any block in the tray to rotate it in place before dragging.
-   - **Color Clear Bonus**: Completing a row or column using cells of all the same color awards the same high score bonus as in the Color Coordinated mode.
+Welcome to **Trish's Games** — a premium, modern web-based gaming application hosting a collection of uniquely crafted games. Built with React, Vite, and custom Vanilla CSS.
 
 ---
 
-## ✨ Features
+## 🎮 The Games Collection
 
-* **Multi-Size Grid System**: Choose your board scale directly from the main menu:
-  - **8x8** (Standard)
-  - **16x16** (Expanded)
-* **Custom Drag and Drop Hook**: Built entirely using pointer events, bypassing standard HTML5 drag-and-drop issues. 
-* **Precision Hover & Snap Shadows**: Shows exactly where the block will land before releasing, colored dynamically according to placement validity (valid vs. invalid placement colors).
-* **Obstruct-Free Dragging**: The picked-up piece is shifted vertically above your pointer and rendered at `0.6` opacity, leaving your view of the board completely clear.
-* **Proportional Scaling**: Blocks in the tray are rendered smaller to fit neatly. When picked up, they scale up instantly to match the exact size of the board cells, maintaining pixel-perfect snapping relative to your mouse coordinate.
-* **Tetris-Style Irregular Shapes**: Includes complex L-shapes, T-shapes, Z-shapes, and Crosses alongside standard rectangles.
-* **Weighted Distribution**: Simple shapes appear more frequently, while complex irregular shapes have a lower probability, balancing difficulty.
-* **Ultra-Premium Aesthetics**: Full glassmorphism design, Outfit font typography, customized dark mode gradients, and micro-animated buttons.
+### 1. BrickSmack
+Stack, clear, and score in this premium block puzzle experience. Drop colorful blocks onto the grid, complete rows and columns, and aim for high scores.
+* **Play Normal**: The classic block puzzle experience.
+* **Color Coordinated**: Clearing lines of the same color awards massive score multipliers.
+* **Colorfully Rotate on This**: Adds block rotation (via Spacebar or on-screen buttons) and rewards massive color coordination bonuses.
+* **Features**: Multi-size grids (8x8, 16x16), custom smooth drag-and-drop mechanics, predictive snap shadows, and Tetris-style irregular shapes.
+
+### 2. Build Me a River
+A strategic puzzle where you route the flow of water from a starting point to an endpoint. 
+* **Mechanics**: Place river tiles to build a flowing path. You are given 3 playable tiles to choose from at any given time.
+* **Obstacles**: Navigate around impassable Rocks, supply water to Houses and Trees (which automatically redirect your placed tiles), and fill expansive Lakes that act as huge multi-directional water junctions.
+* **Level System**: Play through multiple predefined levels scaling from 16x16 up to expansive 64x64 flood plains.
+
+### 3. Slipped My Mind
+A modern take on the classic mastermind code-breaking game.
+* **Gameplay**: The computer chooses a secret 5-ball code out of 6 possible vibrant colors.
+* **Deduction**: You have 10 guesses to crack the code.
+* **Feedback**: After each guess, the game tells you how many balls are the right color and in the right place, and how many are the right color but in the wrong place.
+
+---
+
+## ✨ Application Features
+
+* **Monorepo Architecture**: A centralized home screen that acts as the entry point to all games.
+* **Ultra-Premium Aesthetics**: Full glassmorphism design, Outfit font typography, customized dark mode gradients, dynamic selection rings, and fluid micro-animations across all menus and games.
+* **Fully Responsive**: Playable on desktop and mobile devices.
 
 ---
 
@@ -61,7 +66,7 @@ Welcome to **BrickSmack** (also known as Trish's Game) — a premium, modern puz
 
 ### Building for Production
 
-Compile a optimized production build:
+Compile an optimized production build:
 ```bash
 npm run build
 ```

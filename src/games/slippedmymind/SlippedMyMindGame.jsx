@@ -209,13 +209,20 @@ const SlippedMyMindGame = ({ onExit }) => {
               {g.colours.map((c, ci) => <Ball key={ci} colorId={c} size={36} />)}
             </div>
             <Pegs exact={g.result.exact} close={g.result.close} />
-            <div className="smm-row-score">
-              <span className="smm-score-exact" title="Right colour, right position">
-                {g.result.exact > 0 ? `${g.result.exact}●` : ''}
-              </span>
-              <span className="smm-score-close" title="Right colour, wrong position">
-                {g.result.close > 0 ? `${g.result.close}○` : ''}
-              </span>
+            <div className="smm-row-score smm-row-score-text">
+              {g.result.exact > 0 && (
+                <span className="smm-score-exact">
+                  {g.result.exact} right color right place
+                </span>
+              )}
+              {g.result.exact > 0 && g.result.close > 0 && (
+                <span className="smm-score-sep"> - </span>
+              )}
+              {g.result.close > 0 && (
+                <span className="smm-score-close">
+                  {g.result.close} right color
+                </span>
+              )}
             </div>
           </div>
         ))}

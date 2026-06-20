@@ -1267,6 +1267,19 @@ body {
   min-width: 40px;
 }
 
+.smm-row-score-text {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1rem;
+  font-size: 0.62rem;
+  min-width: 140px;
+  line-height: 1.2;
+}
+
+.smm-score-sep {
+  display: none;
+}
+
 .smm-score-exact { color: #e2e8f0; }
 .smm-score-close { color: #94a3b8; }
 
