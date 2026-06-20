@@ -1,159 +1,331 @@
 /**
- * RiverLogic.js
- * Core game engine for Build Me a River.
+ * RiverLogic.js — Core engine for Build Me a River
  *
- * Key concepts:
+ * ─── Grid cell values ──────────────────────────────────────────────────────
+ *   null
+ *     Empty cell — a tile can be placed here.
  *
- *  grid[r][c]:
- *    null          → empty
- *    'obstacle'    → impassable (rock, house, trees, lake)
- *    { tileId, openEnds: ['N','E',...] }  → a placed river tile
- *      openEnds = connections that face an EMPTY neighbour (i.e. unconnected exits)
+ *   { type:'obstacle', obstacleType:'ROCK' }
+ *     Impassable. Nothing happens here.
  *
- *  Open ends:
- *    Each placed tile contributes open ends: for each connection direction,
- *    if the neighbour in that direction is empty (or is the END sentinel),
- *    that direction is an open end.
+ *   { type:'obstacle', obstacleType:'HOUSE', groupId, connected:bool }
+ *     A house block. Cells sharing the same groupId are the same house.
+ *     connected = true once any tile is placed in an adjacent cell.
+ *     When connected, every exterior side of every house cell acts as an
+ *     open end (the house is a + junction that forces all connections).
+ *     REDIRECT: when a tile is placed adjacent to a house, the tile is
+ *     replaced with one that routes water directly into the house,
+ *     regardless of what the player selected.
  *
- *  Start:
- *    A virtual "source" tile sits just outside the grid at the start edge.
- *    It is treated as a pre-placed tile with one connection pointing inward.
- *    The first open end is always the cell adjacent to the start edge.
+ *   { type:'obstacle', obstacleType:'TREES', treeId, saturated:bool }
+ *     A single-cell tree. Each tree is independent.
+ *     saturated = true once a tile is placed with a connection pointing at it.
+ *     A saturated tree won't absorb another supply.
+ *     REDIRECT: when a tile is placed adjacent to an unsaturated tree, it is
+ *     replaced with one that routes water into the tree (terminating the
+ *     branch there). The tree then becomes saturated.
  *
- *  Win:
- *    When a placed tile has a connection that points directly at the END cell
- *    (i.e. the end edge's adjacent cell), the game is won.
+ *   { type:'obstacle', obstacleType:'LAKE', groupId, filled:bool }
+ *     A multi-cell reservoir. Cells sharing the same groupId are the same lake.
+ *     filled = true when any tile with a connection pointing at any lake cell
+ *     is placed (no redirect — player must aim at the lake explicitly).
+ *     When filled, every exterior side of every lake cell acts as an open end.
  *
- *  Loss:
- *    After each placement, we compute whether ANY tile type could legally be
- *    placed anywhere. If none can, the game is lost.
+ *   { tileId:string }
+ *     A placed river tile.
+ *
+ * ─── Redirect mechanic (trees & houses) ───────────────────────────────────
+ *   When a tile is placed at (r,c) and there is an adjacent TREE or HOUSE:
+ *     1. Collect entry directions (directions from which open ends point INTO
+ *        this cell).
+ *     2. Collect obstacle directions (directions to each adjacent tree/house).
+ *     3. Build a connection set = entryDirs ∪ obstacleDirections.
+ *     4. Derive the tile ID from this connection set (e.g. {W,N} → 'NW').
+ *     5. Replace the player's chosen tile with this computed tile.
+ *   This guarantees the water is routed into every adjacent tree/house,
+ *   regardless of what tile the player selected.
  */
 
 import { TILE_MAP, getTilesForEntry, getCandidateCells, OPPOSITE } from './RiverTiles';
 import { scaleObstacles, scaleEdgePos } from './RiverLevels';
 
-// ---------------------------------------------------------------------------
-// Grid construction
-// ---------------------------------------------------------------------------
+// Canonical direction sort order used to build tile IDs
+const DIR_ORDER = { N: 0, S: 1, E: 2, W: 3 };
+
+// ─── Utility ────────────────────────────────────────────────────────────────
+
+export function moveInDir(r, c, dir) {
+  switch (dir) {
+    case 'N': return { r: r - 1, c };
+    case 'S': return { r: r + 1, c };
+    case 'E': return { r, c: c + 1 };
+    case 'W': return { r, c: c - 1 };
+    default:  return null;
+  }
+}
+
+function oob(r, c, gridSize) {
+  return r < 0 || r >= gridSize || c < 0 || c >= gridSize;
+}
 
 /**
- * Build the initial empty grid for a level at the given grid size.
- * Marks obstacle cells, and returns the initial open-ends list.
+ * Build a tile ID from an arbitrary set of connection directions.
+ * e.g. ['W', 'N'] → 'NW'  (sorted by DIR_ORDER)
+ */
+function tileIdFromConnections(connections) {
+  return [...connections]
+    .sort((a, b) => DIR_ORDER[a] - DIR_ORDER[b])
+    .join('');
+}
+
+// ─── Grid construction ──────────────────────────────────────────────────────
+
+/**
+ * Build the initial grid for a level at the given size.
+ * Returns { grid, startOpenEnd }.
  */
 export function buildInitialGrid(level, gridSize) {
-  // Create empty grid
-  const grid = Array.from({ length: gridSize }, () =>
-    Array(gridSize).fill(null)
-  );
+  const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
 
-  // Place obstacles (scaled from the base 16×16)
-  const scaledObstacles = scaleObstacles(level.obstacles, gridSize);
-  for (const obs of scaledObstacles) {
+  const scaledObs = scaleObstacles(level.obstacles, gridSize);
+  for (const obs of scaledObs) {
     for (const { r, c } of obs.cells) {
       if (r >= 0 && r < gridSize && c >= 0 && c < gridSize) {
-        grid[r][c] = { type: 'obstacle', obstacleType: obs.type };
+        let cell;
+        switch (obs.type) {
+          case 'ROCK':
+            cell = { type: 'obstacle', obstacleType: 'ROCK' };
+            break;
+          case 'HOUSE':
+            cell = { type: 'obstacle', obstacleType: 'HOUSE', groupId: obs.groupId, connected: false };
+            break;
+          case 'TREES':
+            cell = { type: 'obstacle', obstacleType: 'TREES', treeId: obs.treeId, saturated: false };
+            break;
+          case 'LAKE':
+            cell = { type: 'obstacle', obstacleType: 'LAKE', groupId: obs.groupId, filled: false };
+            break;
+          default:
+            cell = { type: 'obstacle', obstacleType: obs.type };
+        }
+        grid[r][c] = cell;
       }
     }
   }
 
-  // Compute start open-end
   const startPos = scaleEdgePos(level.start.pos, gridSize);
   const startOpenEnd = edgeOpenEnd(level.start.edge, startPos, gridSize);
-
   return { grid, startOpenEnd };
 }
 
-/**
- * Returns the open-end created by the start edge:
- * { row, col, dir } where (row,col) is the source tile's virtual position
- * and dir is the direction that points INTO the grid.
- */
 function edgeOpenEnd(edge, pos, gridSize) {
-  // The virtual "source" sits just outside:
   switch (edge) {
-    case 'W': return { row: pos,          col: -1,        dir: 'E' };
-    case 'E': return { row: pos,          col: gridSize,  dir: 'W' };
-    case 'N': return { row: -1,           col: pos,       dir: 'S' };
-    case 'S': return { row: gridSize,     col: pos,       dir: 'N' };
-    default:  return { row: pos,          col: -1,        dir: 'E' };
+    case 'W': return { row: pos,       col: -1,       dir: 'E' };
+    case 'E': return { row: pos,       col: gridSize, dir: 'W' };
+    case 'N': return { row: -1,        col: pos,      dir: 'S' };
+    case 'S': return { row: gridSize,  col: pos,      dir: 'N' };
+    default:  return { row: pos,       col: -1,       dir: 'E' };
   }
 }
 
-/**
- * Returns the (row, col) of the end cell — the grid cell adjacent to the
- * end edge. The tile placed there must connect toward the end.
- */
 export function getEndCell(level, gridSize) {
   const endPos = scaleEdgePos(level.end.pos, gridSize);
   switch (level.end.edge) {
-    case 'W': return { row: endPos, col: 0,            connectDir: 'W' };
-    case 'E': return { row: endPos, col: gridSize - 1, connectDir: 'E' };
-    case 'N': return { row: 0,      col: endPos,       connectDir: 'N' };
-    case 'S': return { row: gridSize - 1, col: endPos, connectDir: 'S' };
-    default:  return { row: endPos, col: gridSize - 1, connectDir: 'E' };
+    case 'W': return { row: endPos,          col: 0,            connectDir: 'W' };
+    case 'E': return { row: endPos,          col: gridSize - 1, connectDir: 'E' };
+    case 'N': return { row: 0,               col: endPos,       connectDir: 'N' };
+    case 'S': return { row: gridSize - 1,    col: endPos,       connectDir: 'S' };
+    default:  return { row: endPos,          col: gridSize - 1, connectDir: 'E' };
   }
 }
 
-// ---------------------------------------------------------------------------
-// Open-end computation
-// ---------------------------------------------------------------------------
+// ─── Redirect mechanic helpers ──────────────────────────────────────────────
 
 /**
- * Compute all open ends for the full current board state.
- * An open end is a connection of a placed tile that points into an empty cell.
+ * From the current open-ends, find which entry directions lead INTO cell (row,col).
+ */
+function entryDirsForCell(row, col, openEnds, gridSize, grid) {
+  const candidates = getCandidateCells(openEnds, gridSize, grid);
+  const dirs = new Set();
+  for (const { row: cr, col: cc, entryDir } of candidates) {
+    if (cr === row && cc === col) dirs.add(entryDir);
+  }
+  return dirs;
+}
+
+/**
+ * Compute the tile ID that should actually be placed at (row,col).
  *
- * @param {Array<Array>} grid
- * @param {Array<{row,col,dir}>} startOpenEnds - always [startOpenEnd] initially
- * @param {number} gridSize
- * @param {object} level
- * @returns {Array<{row,col,dir}>}
+ * Rules:
+ *   - Start with all entry directions (from active open ends pointing here).
+ *   - For each orthogonal neighbour that is an unprocessed TREE or any HOUSE:
+ *       add the direction toward that neighbour to the connection set.
+ *   - Derive the tile ID from the merged connection set.
+ *   - If there are no tree/house neighbours, use the player's selected tile.
+ */
+function computeActualTile(row, col, entryDirs, grid, gridSize, selectedTileId) {
+  const connections = new Set(entryDirs);
+  let hasRedirect = false;
+
+  for (const dir of ['N', 'E', 'S', 'W']) {
+    const nb = moveInDir(row, col, dir);
+    if (!nb || oob(nb.r, nb.c, gridSize)) continue;
+    const nbCell = grid[nb.r][nb.c];
+    if (!nbCell || nbCell.type !== 'obstacle') continue;
+
+    if (nbCell.obstacleType === 'HOUSE') {
+      connections.add(dir);
+      hasRedirect = true;
+    } else if (nbCell.obstacleType === 'TREES' && !nbCell.saturated) {
+      connections.add(dir);
+      hasRedirect = true;
+    }
+  }
+
+  if (!hasRedirect) return selectedTileId;
+
+  const derivedId = tileIdFromConnections(connections);
+  // Verify the tile exists in our catalogue; fall back to selected if not
+  return TILE_MAP[derivedId] ? derivedId : selectedTileId;
+}
+
+// ─── Obstacle effect application ────────────────────────────────────────────
+
+/**
+ * Mark all cells of an obstacle group with new state.
+ */
+function markGroup(grid, gridSize, obstacleType, groupId, updates) {
+  const newGrid = grid.map(r => [...r]);
+  for (let r = 0; r < gridSize; r++) {
+    for (let c = 0; c < gridSize; c++) {
+      const cell = newGrid[r][c];
+      if (cell?.type === 'obstacle' &&
+          cell.obstacleType === obstacleType &&
+          cell.groupId === groupId) {
+        newGrid[r][c] = { ...cell, ...updates };
+      }
+    }
+  }
+  return newGrid;
+}
+
+/**
+ * Apply post-placement obstacle effects after placing tileId at (row,col).
+ *
+ * For each connection direction of the placed tile:
+ *   - TREES neighbour (unsaturated) → mark saturated
+ *   - HOUSE neighbour              → mark entire group connected
+ *   - LAKE neighbour               → mark entire group filled
+ *
+ * Returns new (immutable) grid.
+ */
+export function applyObstacleEffects(grid, row, col, tileId, gridSize) {
+  let g = grid.map(r => [...r]);
+  const tile = TILE_MAP[tileId];
+  if (!tile) return g;
+
+  for (const dir of tile.connections) {
+    const nb = moveInDir(row, col, dir);
+    if (!nb || oob(nb.r, nb.c, gridSize)) continue;
+    const nbCell = g[nb.r][nb.c];
+    if (!nbCell || nbCell.type !== 'obstacle') continue;
+
+    if (nbCell.obstacleType === 'TREES' && !nbCell.saturated) {
+      g[nb.r][nb.c] = { ...nbCell, saturated: true };
+    } else if (nbCell.obstacleType === 'HOUSE' && !nbCell.connected) {
+      g = markGroup(g, gridSize, 'HOUSE', nbCell.groupId, { connected: true });
+    } else if (nbCell.obstacleType === 'LAKE' && !nbCell.filled) {
+      g = markGroup(g, gridSize, 'LAKE', nbCell.groupId, { filled: true });
+    }
+  }
+
+  return g;
+}
+
+// ─── Full placement pipeline ─────────────────────────────────────────────────
+
+/**
+ * Full tile placement pipeline:
+ *   1. Compute actual tile ID (redirect if adjacent to tree/house).
+ *   2. Place tile on grid.
+ *   3. Apply obstacle effects.
+ *
+ * Returns { grid: newGrid, actualTileId }
+ */
+export function processTilePlacement(grid, selectedTileId, row, col, openEnds, gridSize) {
+  const entryDirs = entryDirsForCell(row, col, openEnds, gridSize, grid);
+  const actualTileId = computeActualTile(row, col, entryDirs, grid, gridSize, selectedTileId);
+
+  // Place tile
+  const gridWithTile = grid.map(r => [...r]);
+  gridWithTile[row][col] = { tileId: actualTileId };
+
+  // Apply obstacle effects
+  const finalGrid = applyObstacleEffects(gridWithTile, row, col, actualTileId, gridSize);
+
+  return { grid: finalGrid, actualTileId };
+}
+
+// ─── Open-end computation ───────────────────────────────────────────────────
+
+/**
+ * Compute all open ends for the current board state.
+ *
+ * Sources of open ends:
+ *   1. Start virtual tile — if first grid cell is still empty.
+ *   2. Every placed tile's connections — those pointing at empty (null) cells.
+ *   3. Connected HOUSE cells — all exterior sides facing empty cells.
+ *   4. Filled LAKE cells — all exterior sides facing empty cells.
+ *
+ * Note: connections pointing at trees/rocks/unconnected houses/unfilled lakes
+ * are NOT open ends (those branches are terminated or absorbed).
  */
 export function computeOpenEnds(grid, startOpenEnds, gridSize) {
   const openEnds = [];
 
-  // Check start open ends (virtual source tile)
+  // 1. Start open end (virtual source)
   for (const se of startOpenEnds) {
-    const { row, col, dir } = se;
-    let nr = row, nc = col;
-    if (dir === 'N') nr--;
-    else if (dir === 'S') nr++;
-    else if (dir === 'E') nc++;
-    else if (dir === 'W') nc--;
-
-    // If the neighbour is still empty (or is the end cell), keep this open end
-    if (nr >= 0 && nr < gridSize && nc >= 0 && nc < gridSize) {
-      if (grid[nr][nc] === null) {
-        openEnds.push(se);
-      }
-      // If the neighbour is a tile, its open ends will be computed below
+    const nb = moveInDir(se.row, se.col, se.dir);
+    if (nb && !oob(nb.r, nb.c, gridSize) && grid[nb.r][nb.c] === null) {
+      openEnds.push(se);
     }
   }
 
-  // Check all placed tiles
   for (let r = 0; r < gridSize; r++) {
     for (let c = 0; c < gridSize; c++) {
       const cell = grid[r][c];
-      if (!cell || cell.type === 'obstacle') continue;
+      if (!cell) continue;
 
+      if (cell.type === 'obstacle') {
+        // 3. Connected HOUSE → open ends on all exterior empty sides
+        if (cell.obstacleType === 'HOUSE' && cell.connected) {
+          for (const dir of ['N', 'E', 'S', 'W']) {
+            const nb = moveInDir(r, c, dir);
+            if (!nb || oob(nb.r, nb.c, gridSize)) continue;
+            if (grid[nb.r][nb.c] === null) openEnds.push({ row: r, col: c, dir });
+          }
+        }
+        // 4. Filled LAKE → open ends on all exterior empty sides
+        if (cell.obstacleType === 'LAKE' && cell.filled) {
+          for (const dir of ['N', 'E', 'S', 'W']) {
+            const nb = moveInDir(r, c, dir);
+            if (!nb || oob(nb.r, nb.c, gridSize)) continue;
+            if (grid[nb.r][nb.c] === null) openEnds.push({ row: r, col: c, dir });
+          }
+        }
+        continue;
+      }
+
+      // 2. Placed tile connections → only toward empty cells
       const tile = TILE_MAP[cell.tileId];
       if (!tile) continue;
 
       for (const dir of tile.connections) {
-        let nr = r, nc = c;
-        if (dir === 'N') nr--;
-        else if (dir === 'S') nr++;
-        else if (dir === 'E') nc++;
-        else if (dir === 'W') nc--;
-
-        // Out of bounds → skip (unless it's the end edge direction)
-        if (nr < 0 || nr >= gridSize || nc < 0 || nc >= gridSize) continue;
-
-        const neighbour = grid[nr][nc];
-        if (neighbour === null) {
-          // Open empty cell → this is an open end
+        const nb = moveInDir(r, c, dir);
+        if (!nb || oob(nb.r, nb.c, gridSize)) continue;
+        if (grid[nb.r][nb.c] === null) {
           openEnds.push({ row: r, col: c, dir });
         }
-        // If neighbour is a tile or obstacle, not an open end
       }
     }
   }
@@ -168,19 +340,10 @@ export function computeOpenEnds(grid, startOpenEnds, gridSize) {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Tile placement
-// ---------------------------------------------------------------------------
+// ─── Tile placement (simple, no effects) ────────────────────────────────────
 
 /**
- * Place a tile on the grid. Returns the new grid (immutable).
- * Does NOT mutate the input grid.
- *
- * @param {Array<Array>} grid
- * @param {string} tileId
- * @param {number} row
- * @param {number} col
- * @returns {Array<Array>}
+ * Immutably place a tile. Use processTilePlacement for the full pipeline.
  */
 export function placeTile(grid, tileId, row, col) {
   const newGrid = grid.map(r => [...r]);
@@ -189,17 +352,7 @@ export function placeTile(grid, tileId, row, col) {
 }
 
 /**
- * Returns all valid cells where a specific tile can be placed.
- * A cell is valid if:
- *   1. It is empty (null)
- *   2. It is adjacent to at least one open end
- *   3. The tile has a connection on the side matching that open end
- *
- * @param {string} tileId
- * @param {Array<{row,col,dir}>} openEnds
- * @param {Array<Array>} grid
- * @param {number} gridSize
- * @returns {Set<string>}  set of "r,c" strings
+ * Returns the Set<"r,c"> of cells where tileId can legally be placed.
  */
 export function getValidCells(tileId, openEnds, grid, gridSize) {
   const tile = TILE_MAP[tileId];
@@ -209,124 +362,127 @@ export function getValidCells(tileId, openEnds, grid, gridSize) {
   const candidates = getCandidateCells(openEnds, gridSize, grid);
 
   for (const { row, col, entryDir } of candidates) {
-    // The tile must have a connection on the entryDir side
     if (tile.connections.includes(entryDir)) {
       validSet.add(`${row},${col}`);
     }
   }
-
   return validSet;
 }
 
-// ---------------------------------------------------------------------------
-// Offer generation (guaranteed all 3 are playable)
-// ---------------------------------------------------------------------------
+// ─── Offer generation ───────────────────────────────────────────────────────
 
 /**
- * Generate 3 tile IDs that are ALL guaranteed to be playable given the
- * current open ends.
- *
- * Algorithm:
- *  1. Compute candidate cells from open ends.
- *  2. For each candidate cell, find all tile types whose connections include entryDir.
- *  3. Union all playable tile IDs across all candidates → valid pool.
- *  4. If pool size < 3: game over (return null).
- *  5. Randomly sample 3 unique IDs from the pool (no repeats).
- *
- * @param {Array<{row,col,dir}>} openEnds
- * @param {Array<Array>} grid
- * @param {number} gridSize
- * @returns {{ offer: string[]|null, isGameOver: boolean }}
+ * Generate 3 guaranteed-playable tile IDs from the current open ends.
+ * Returns { offer: string[]|null, isGameOver: bool }.
  */
 export function generateOffer(openEnds, grid, gridSize) {
   const candidates = getCandidateCells(openEnds, gridSize, grid);
-
-  // Build pool of playable tile IDs
   const playableSet = new Set();
+
   for (const { entryDir } of candidates) {
-    const tileIds = getTilesForEntry(entryDir);
-    for (const id of tileIds) playableSet.add(id);
+    for (const id of getTilesForEntry(entryDir)) playableSet.add(id);
   }
 
   const pool = Array.from(playableSet);
+  if (pool.length === 0) return { offer: null, isGameOver: true };
 
-  if (pool.length === 0) {
-    return { offer: null, isGameOver: true };
-  }
-
-  // Sample 3 unique tiles (or fewer if pool is small, but that shouldn't happen
-  // with 11 tile types unless severely constrained)
   const shuffled = pool.sort(() => Math.random() - 0.5);
   const offer = shuffled.slice(0, Math.min(3, shuffled.length));
-
-  // Pad to 3 if needed (repeat tiles — very rare edge case)
-  while (offer.length < 3) {
-    offer.push(pool[Math.floor(Math.random() * pool.length)]);
-  }
+  while (offer.length < 3) offer.push(pool[Math.floor(Math.random() * pool.length)]);
 
   return { offer, isGameOver: false };
 }
 
-// ---------------------------------------------------------------------------
-// Win / Loss detection
-// ---------------------------------------------------------------------------
+// ─── Win / Loss detection ────────────────────────────────────────────────────
 
 /**
- * Check if the river has been completed (connected start to end).
+ * Flood-fill from start to see if the river reaches the end.
  *
- * Flood fill from the start's first open-end neighbour. If we reach the
- * end cell AND the tile there connects toward the end edge, win!
+ * Traversal rules:
+ *   - Placed tiles: follow their connections.
+ *   - Connected HOUSE cells: spread through all cells of the group,
+ *     then follow into any adjacent placed tile.
+ *   - Filled LAKE cells: same as house.
+ *   - Other obstacles, empty cells: stop.
  *
- * @param {Array<Array>} grid
- * @param {object} level
- * @param {number} gridSize
- * @param {{row,col,dir}} startOpenEnd
- * @returns {boolean}
+ * Win when the end cell contains a tile that connects toward the end edge.
  */
 export function checkWin(grid, level, gridSize, startOpenEnd) {
   const endCell = getEndCell(level, gridSize);
 
-  // BFS/DFS flood fill through connected tiles from start
-  const startNeighbour = getNeighbour(startOpenEnd.row, startOpenEnd.col, startOpenEnd.dir);
-  if (!startNeighbour) return false;
-  const { r: sr, c: sc } = startNeighbour;
-  if (sr < 0 || sr >= gridSize || sc < 0 || sc >= gridSize) return false;
-  if (!grid[sr][sc] || grid[sr][sc].type === 'obstacle') return false;
+  const sn = moveInDir(startOpenEnd.row, startOpenEnd.col, startOpenEnd.dir);
+  if (!sn || oob(sn.r, sn.c, gridSize)) return false;
+  if (!grid[sn.r][sn.c]) return false; // empty — nothing to traverse
 
   const visited = new Set();
-  const queue = [{ r: sr, c: sc, fromDir: OPPOSITE[startOpenEnd.dir] }];
+  const visitedGroups = new Set();
+  const queue = [{ r: sn.r, c: sn.c, fromDir: OPPOSITE[startOpenEnd.dir] }];
+
+  const spreadGroup = (obstacleType, groupId) => {
+    const gk = `${obstacleType}-${groupId}`;
+    if (visitedGroups.has(gk)) return;
+    visitedGroups.add(gk);
+
+    for (let gr = 0; gr < gridSize; gr++) {
+      for (let gc = 0; gc < gridSize; gc++) {
+        const gCell = grid[gr][gc];
+        if (!gCell || gCell.type !== 'obstacle') continue;
+        if (gCell.obstacleType !== obstacleType || gCell.groupId !== groupId) continue;
+
+        // Enqueue all non-empty, non-same-group neighbours
+        for (const dir of ['N', 'E', 'S', 'W']) {
+          const nb = moveInDir(gr, gc, dir);
+          if (!nb || oob(nb.r, nb.c, gridSize)) continue;
+          const nbCell = grid[nb.r][nb.c];
+          if (!nbCell) continue; // empty — no tile to enter
+          // Don't re-enter the same group
+          if (nbCell.type === 'obstacle' && nbCell.groupId === groupId) continue;
+          queue.push({ r: nb.r, c: nb.c, fromDir: OPPOSITE[dir] });
+        }
+      }
+    }
+  };
 
   while (queue.length > 0) {
     const { r, c, fromDir } = queue.shift();
-    const key = `${r},${c}`;
-    if (visited.has(key)) continue;
-    visited.add(key);
+    const vk = `${r},${c},${fromDir}`;
+    if (visited.has(vk)) continue;
+    visited.add(vk);
 
     const cell = grid[r][c];
-    if (!cell || cell.type === 'obstacle') continue;
+    if (!cell) continue;
 
+    if (cell.type === 'obstacle') {
+      if (cell.obstacleType === 'HOUSE' && cell.connected) spreadGroup('HOUSE', cell.groupId);
+      else if (cell.obstacleType === 'LAKE' && cell.filled) spreadGroup('LAKE', cell.groupId);
+      continue;
+    }
+
+    // Placed tile
     const tile = TILE_MAP[cell.tileId];
-    if (!tile) continue;
-    // Tile must connect on the side we entered from
-    if (!tile.connections.includes(fromDir)) continue;
+    if (!tile || !tile.connections.includes(fromDir)) continue;
 
-    // Check win: are we at the end cell and does the tile connect toward the end?
-    if (r === endCell.row && c === endCell.col &&
-        tile.connections.includes(endCell.connectDir)) {
+    // Win condition
+    if (r === endCell.row && c === endCell.col && tile.connections.includes(endCell.connectDir)) {
       return true;
     }
 
-    // Continue flood fill
+    // Follow tile connections
     for (const dir of tile.connections) {
-      if (dir === fromDir) continue; // don't backtrack
-      const nb = getNeighbour(r, c, dir);
-      if (!nb) continue;
-      const { r: nr, c: nc } = nb;
-      if (nr < 0 || nr >= gridSize || nc < 0 || nc >= gridSize) continue;
-      if (!grid[nr][nc] || grid[nr][nc].type === 'obstacle') continue;
-      if (!visited.has(`${nr},${nc}`)) {
-        queue.push({ r: nr, c: nc, fromDir: OPPOSITE[dir] });
+      if (dir === fromDir) continue;
+      const nb = moveInDir(r, c, dir);
+      if (!nb || oob(nb.r, nb.c, gridSize)) continue;
+      const nbCell = grid[nb.r][nb.c];
+      if (!nbCell) continue; // empty — dead end
+      // Only enter connected houses and filled lakes (others are dead ends)
+      if (nbCell.type === 'obstacle') {
+        if ((nbCell.obstacleType === 'HOUSE' && nbCell.connected) ||
+            (nbCell.obstacleType === 'LAKE' && nbCell.filled)) {
+          queue.push({ r: nb.r, c: nb.c, fromDir: OPPOSITE[dir] });
+        }
+        continue;
       }
+      queue.push({ r: nb.r, c: nb.c, fromDir: OPPOSITE[dir] });
     }
   }
 
@@ -334,39 +490,15 @@ export function checkWin(grid, level, gridSize, startOpenEnd) {
 }
 
 /**
- * Check if the game is lost (no tile can be legally placed anywhere).
- * This is called BEFORE generating a new offer.
- *
- * @param {Array<{row,col,dir}>} openEnds
- * @param {Array<Array>} grid
- * @param {number} gridSize
- * @returns {boolean}
+ * The game is lost when no tile can legally be placed anywhere.
+ * Called BEFORE generating a new offer.
  */
 export function checkLoss(openEnds, grid, gridSize) {
   if (openEnds.length === 0) return true;
-
   const candidates = getCandidateCells(openEnds, gridSize, grid);
   if (candidates.length === 0) return true;
-
-  // Check if at least one tile type fits at least one candidate cell
   for (const { entryDir } of candidates) {
-    const fits = getTilesForEntry(entryDir);
-    if (fits.length > 0) return false;
+    if (getTilesForEntry(entryDir).length > 0) return false;
   }
-
   return true;
-}
-
-// ---------------------------------------------------------------------------
-// Utility
-// ---------------------------------------------------------------------------
-
-function getNeighbour(r, c, dir) {
-  switch (dir) {
-    case 'N': return { r: r - 1, c };
-    case 'S': return { r: r + 1, c };
-    case 'E': return { r, c: c + 1 };
-    case 'W': return { r, c: c - 1 };
-    default: return null;
-  }
 }

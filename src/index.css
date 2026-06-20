@@ -927,6 +927,15 @@ body {
   color: var(--text-main);
 }
 
+.redirect-notice {
+  font-size: 0.72rem;
+  color: #fb923c;
+  font-style: italic;
+  margin-left: 0.4rem;
+  opacity: 0.85;
+}
+
+
 .river-board-area {
   flex: 1;
   display: flex;

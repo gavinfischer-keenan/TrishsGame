@@ -4,7 +4,7 @@ import TileOffer from './TileOffer';
 import {
   buildInitialGrid,
   computeOpenEnds,
-  placeTile,
+  processTilePlacement,
   getValidCells,
   generateOffer,
   checkWin,
@@ -16,16 +16,18 @@ import { SIZE_MAP } from './engine/RiverLevels';
  * RiverGame.jsx
  * Orchestrates a single round of Build Me a River.
  *
- * Props:
- *   level     - level definition object
- *   sizeName  - 'stream' | 'river' | 'flood'
- *   onExit    - () => void  (return to level select)
+ * Placement flow (per click):
+ *   1. processTilePlacement() — computes redirect tile if adjacent to tree/house,
+ *      places it, applies obstacle effects (saturation / connection / lake fill).
+ *   2. checkWin() — BFS through tiles, connected houses, filled lakes.
+ *   3. computeOpenEnds() — includes house/lake outlets.
+ *   4. checkLoss() — if no candidates remain.
+ *   5. generateOffer() — guaranteed 3 playable tiles.
  */
 
 const RiverGame = ({ level, sizeName, onExit }) => {
   const gridSize = SIZE_MAP[sizeName] || 16;
 
-  // Build initial grid and start open end
   const initState = () => {
     const { grid, startOpenEnd } = buildInitialGrid(level, gridSize);
     const openEnds = [startOpenEnd];
@@ -40,6 +42,7 @@ const RiverGame = ({ level, sizeName, onExit }) => {
       isWon: false,
       isLost: isGameOver,
       tilesPlaced: 0,
+      lastRedirected: false, // whether the last placement was auto-redirected
     };
   };
 
@@ -56,32 +59,46 @@ const RiverGame = ({ level, sizeName, onExit }) => {
   const handleCellClick = useCallback((row, col) => {
     setState(prev => {
       if (!prev.selectedTile) return prev;
-      const cellKey = `${row},${col}`;
-      if (!prev.validCells.has(cellKey)) return prev;
+      if (!prev.validCells.has(`${row},${col}`)) return prev;
 
-      // Place the tile
-      const newGrid = placeTile(prev.grid, prev.selectedTile, row, col);
+      // ── 1. Place tile (with possible redirect) ──────────────────────────
+      const { grid: newGrid, actualTileId } = processTilePlacement(
+        prev.grid, prev.selectedTile, row, col, prev.openEnds, gridSize
+      );
+      const wasRedirected = actualTileId !== prev.selectedTile;
       const newTilesPlaced = prev.tilesPlaced + 1;
 
-      // Check win
+      // ── 2. Win check ────────────────────────────────────────────────────
       const won = checkWin(newGrid, level, gridSize, prev.startOpenEnd);
       if (won) {
-        return { ...prev, grid: newGrid, isWon: true, selectedTile: null, validCells: new Set(), tilesPlaced: newTilesPlaced };
+        return {
+          ...prev, grid: newGrid, isWon: true,
+          selectedTile: null, validCells: new Set(),
+          tilesPlaced: newTilesPlaced, lastRedirected: wasRedirected,
+        };
       }
 
-      // Recompute open ends
+      // ── 3. Recompute open ends (includes house/lake outlets now) ────────
       const newOpenEnds = computeOpenEnds(newGrid, [prev.startOpenEnd], gridSize);
 
-      // Check loss
+      // ── 4. Loss check ───────────────────────────────────────────────────
       const lost = checkLoss(newOpenEnds, newGrid, gridSize);
       if (lost) {
-        return { ...prev, grid: newGrid, openEnds: newOpenEnds, isLost: true, selectedTile: null, validCells: new Set(), tilesPlaced: newTilesPlaced };
+        return {
+          ...prev, grid: newGrid, openEnds: newOpenEnds,
+          isLost: true, selectedTile: null, validCells: new Set(),
+          tilesPlaced: newTilesPlaced, lastRedirected: wasRedirected,
+        };
       }
 
-      // Generate new offer
+      // ── 5. New offer ────────────────────────────────────────────────────
       const { offer, isGameOver } = generateOffer(newOpenEnds, newGrid, gridSize);
       if (isGameOver) {
-        return { ...prev, grid: newGrid, openEnds: newOpenEnds, offer: [], isLost: true, selectedTile: null, validCells: new Set(), tilesPlaced: newTilesPlaced };
+        return {
+          ...prev, grid: newGrid, openEnds: newOpenEnds, offer: [],
+          isLost: true, selectedTile: null, validCells: new Set(),
+          tilesPlaced: newTilesPlaced, lastRedirected: wasRedirected,
+        };
       }
 
       return {
@@ -92,13 +109,14 @@ const RiverGame = ({ level, sizeName, onExit }) => {
         selectedTile: null,
         validCells: new Set(),
         tilesPlaced: newTilesPlaced,
+        lastRedirected: wasRedirected,
       };
     });
   }, [level, gridSize]);
 
   const handleRestart = () => setState(initState());
 
-  const { grid, offer, selectedTile, validCells, isWon, isLost, tilesPlaced, startOpenEnd } = state;
+  const { grid, offer, selectedTile, validCells, isWon, isLost, tilesPlaced, lastRedirected } = state;
 
   return (
     <div className="river-game-container">
@@ -110,6 +128,7 @@ const RiverGame = ({ level, sizeName, onExit }) => {
         </div>
         <div className="river-tiles-count">
           Tiles placed: <strong>{tilesPlaced}</strong>
+          {lastRedirected && <span className="redirect-notice"> ↩ redirected</span>}
         </div>
       </header>
 
@@ -121,7 +140,6 @@ const RiverGame = ({ level, sizeName, onExit }) => {
           validCells={validCells}
           selectedTile={selectedTile}
           onCellClick={handleCellClick}
-          startOpenEnd={startOpenEnd}
         />
       </div>
 

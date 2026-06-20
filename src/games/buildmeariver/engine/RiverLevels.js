@@ -2,32 +2,23 @@
  * RiverLevels.js
  * Level definitions for Build Me a River.
  *
- * Level format:
- * {
- *   id:          number
- *   label:       string  (display name)
- *   description: string  (flavour text)
- *   gridSize:    number  (NxN grid)
- *   start:       { edge: 'N'|'E'|'S'|'W', pos: number }  (0-indexed cell on that edge)
- *   end:         { edge: 'N'|'E'|'S'|'W', pos: number }
- *   obstacles:   Array<{ type: 'ROCK'|'HOUSE'|'TREES'|'LAKE', cells: [{r,c}] }>
- *   comingSoon:  boolean (optional, if true the level is locked)
- * }
+ * Obstacle format:
+ *   ROCK:   { type:'ROCK',  cells:[{r,c}] }
+ *   HOUSE:  { type:'HOUSE', groupId:number, cells:[{r,c},...] }
+ *           groupId groups all cells of the SAME house together.
+ *   TREES:  { type:'TREES', treeId:number, cells:[{r,c}] }
+ *           Each tree is a separate obstacle with its own treeId.
+ *   LAKE:   { type:'LAKE',  groupId:number, cells:[{r,c},...] }
+ *           groupId groups all cells of the SAME lake together.
  *
- * The grid size shown to the user corresponds to the "sizeName" setting:
- *   'stream'  → 16x16
- *   'river'   → 32x32
- *   'flood'   → 64x64
- *
- * Obstacles scale proportionally when the grid size changes. They are
- * defined here for the base 16x16 grid; the game engine scales them.
+ * All positions are defined for the base 16×16 grid and scaled
+ * proportionally for larger grid sizes.
  */
 
-/** Maps user-facing size name to actual grid dimension */
 export const SIZE_MAP = {
   stream: 16,
-  river: 32,
-  flood: 64,
+  river:  32,
+  flood:  64,
 };
 
 export const SIZE_LABELS = [
@@ -36,10 +27,6 @@ export const SIZE_LABELS = [
   { key: 'flood',  label: 'Flood',  subtitle: '64×64' },
 ];
 
-/**
- * Scale a set of obstacle cells from the base 16x16 to a target grid size.
- * We multiply each coordinate by (targetSize / 16).
- */
 export function scaleObstacles(obstacles, targetSize) {
   const scale = targetSize / 16;
   return obstacles.map(obs => ({
@@ -51,17 +38,10 @@ export function scaleObstacles(obstacles, targetSize) {
   }));
 }
 
-/**
- * Scale start/end position from base 16 to targetSize.
- */
 export function scaleEdgePos(pos, targetSize) {
   return Math.round(pos * (targetSize / 16));
 }
 
-/**
- * Get the open-end direction from a start edge:
- * Water flows inward, so an edge of 'W' means the open end points 'E'.
- */
 export const EDGE_INWARD = { N: 'S', S: 'N', E: 'W', W: 'E' };
 
 // ---------------------------------------------------------------------------
@@ -73,23 +53,27 @@ export const LEVELS = [
     id: 1,
     label: 'Tutorial',
     description: 'Find a path through the woods and past the old farmhouse.',
-    // Start on West edge, row 7 (roughly middle)
     start: { edge: 'W', pos: 7 },
-    // End on East edge, row 7
     end:   { edge: 'E', pos: 7 },
     obstacles: [
-      // A lone rock in the middle path to force a detour
+      // Rocks — impassable
       { type: 'ROCK',  cells: [{ r: 7, c: 8 }] },
-      // A second rock
       { type: 'ROCK',  cells: [{ r: 5, c: 5 }] },
-      // A house (2×2) in the upper-centre area
-      { type: 'HOUSE', cells: [{ r: 3, c: 7 }, { r: 3, c: 8 }, { r: 4, c: 7 }, { r: 4, c: 8 }] },
-      // A small grove of trees
-      { type: 'TREES', cells: [{ r: 10, c: 4 }] },
-      { type: 'TREES', cells: [{ r: 10, c: 5 }] },
-      { type: 'TREES', cells: [{ r: 11, c: 4 }] },
-      // A small lake (3 cells)
-      { type: 'LAKE',  cells: [{ r: 12, c: 9 }, { r: 12, c: 10 }, { r: 13, c: 9 }] },
+      // House — 2×2 block; connects when any adjacent tile is placed
+      { type: 'HOUSE', groupId: 1, cells: [
+          { r: 3, c: 7 }, { r: 3, c: 8 },
+          { r: 4, c: 7 }, { r: 4, c: 8 },
+        ],
+      },
+      // Trees — each is independent; absorbs the first water supply pointing at it
+      { type: 'TREES', treeId: 1, cells: [{ r: 10, c: 4 }] },
+      { type: 'TREES', treeId: 2, cells: [{ r: 10, c: 5 }] },
+      { type: 'TREES', treeId: 3, cells: [{ r: 11, c: 4 }] },
+      // Lake — shared reservoir; fills when any connected tile points at it
+      { type: 'LAKE',  groupId: 1, cells: [
+          { r: 12, c: 9 }, { r: 12, c: 10 }, { r: 13, c: 9 },
+        ],
+      },
     ],
   },
   {
