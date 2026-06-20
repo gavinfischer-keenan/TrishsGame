@@ -26,12 +26,21 @@ const GAMES = [
     icon: '🌊',
     available: true,
   },
-  // Future games — kept as coming soon
+  {
+    key: 'slippedmymind',
+    title: "Slipped My Mind",
+    subtitle: 'Crack the secret code',
+    description: "Can you deduce the computer's 5-ball colour code in 10 guesses? After every attempt you'll learn what's right — and what's close.",
+    gradient: 'linear-gradient(135deg, #6d28d9 0%, #a21caf 100%)',
+    icon: '🎯',
+    available: true,
+  },
+  // Future games
   {
     key: 'future1',
     title: 'Coming Soon',
     subtitle: 'A new adventure',
-    description: 'The next game in Trish\'s Games is being built. Stay tuned!',
+    description: "The next game in Trish's Games is being built. Stay tuned!",
     gradient: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
     icon: '🔮',
     available: false,
