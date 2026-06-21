@@ -22,8 +22,15 @@ A strategic puzzle where you route the flow of water from a starting point to an
 ### 3. Slipped My Mind
 A modern take on the classic mastermind code-breaking game.
 * **Gameplay**: The computer chooses a secret 5-ball code out of 6 possible vibrant colors.
-* **Deduction**: You have 10 guesses to crack the code.
+* **Deduction**: You have 15 guesses to crack the code.
 * **Feedback**: After each guess, the game tells you how many balls are the right color and in the right place, and how many are the right color but in the wrong place.
+* **Hint System**: Use hints at the cost of additional turns to deduce the right placements.
+
+### 4. Number Drawing
+A logic puzzle that blends Nonograms with arithmetic to reconstruct ASCII art masterpieces.
+* **Mechanics**: You are presented with row and column segment sums, alongside faint visual blob guides.
+* **Deduction**: Use the intersection of row/column sums and contiguous blob shapes to deduce the exact hidden numbers across the grid.
+* **Level Editor**: Contains a built-in text-based level editor allowing you to paste any ASCII art numeric grid to generate custom puzzles on the fly.
 
 ---
 

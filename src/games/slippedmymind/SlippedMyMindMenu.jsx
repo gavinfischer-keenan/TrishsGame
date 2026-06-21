@@ -37,7 +37,7 @@ const SlippedMyMindMenu = ({ onPlay, onBack }) => (
 
       <p className="smm-menu-desc">
         The computer has chosen a secret <strong>5-ball code</strong> from
-        6 colours. You have <strong>10 guesses</strong> to crack it.
+        6 colours. You have <strong>15 guesses</strong> to crack it.
         After each guess you&apos;ll learn:
       </p>
 

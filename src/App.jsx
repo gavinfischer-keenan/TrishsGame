@@ -3,10 +3,11 @@ import HomeScreen from './components/HomeScreen';
 import BrickSmack from './games/bricksmack/BrickSmack';
 import BuildMeARiver from './games/buildmeariver/BuildMeARiver';
 import SlippedMyMind from './games/slippedmymind/SlippedMyMind';
+import NumberDrawing from './games/numberdrawing/NumberDrawing';
 
 function App() {
   const [currentGame, setCurrentGame] = useState(null);
-  // null | 'bricksmack' | 'buildmeariver' | 'slippedmymind'
+  // null | 'bricksmack' | 'buildmeariver' | 'slippedmymind' | 'numberdrawing'
 
   const exit = () => setCurrentGame(null);
 
@@ -15,6 +16,7 @@ function App() {
       {currentGame === 'bricksmack'    && <BrickSmack    onExit={exit} />}
       {currentGame === 'buildmeariver' && <BuildMeARiver onExit={exit} />}
       {currentGame === 'slippedmymind' && <SlippedMyMind onExit={exit} />}
+      {currentGame === 'numberdrawing' && <NumberDrawing onExit={exit} />}
       {!currentGame && <HomeScreen onSelectGame={setCurrentGame} />}
     </div>
   );
