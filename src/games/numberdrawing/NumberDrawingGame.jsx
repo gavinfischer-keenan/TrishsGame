@@ -126,6 +126,19 @@ const NumberDrawingGame = ({ levelData, onExit }) => {
       if (c.type === 'playable') nums.add(c.target);
     }));
 
+    // Add 2 random decoy numbers not present in the puzzle
+    const allDigits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const unusedDigits = allDigits.filter(d => !nums.has(d));
+    
+    // Shuffle unused digits to pick random ones
+    for (let i = unusedDigits.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [unusedDigits[i], unusedDigits[j]] = [unusedDigits[j], unusedDigits[i]];
+    }
+    
+    const decoyNumbers = unusedDigits.slice(0, 2);
+    decoyNumbers.forEach(d => nums.add(d));
+
     return {
       grid: g,
       width: g[0].length,
@@ -238,7 +251,7 @@ const NumberDrawingGame = ({ levelData, onExit }) => {
                   const isOver = currentSum > h.sum;
                   return (
                     <div key={i} className={`nd-hint-text ${isCorrect ? 'nd-hint-correct' : isOver ? 'nd-hint-error' : ''}`}>
-                      {h.sum}
+                      <span style={{ fontSize: '0.75em', opacity: 0.7, marginRight: '1px' }}>{currentSum}/</span>{h.sum}
                     </div>
                   );
                 })}
@@ -257,7 +270,7 @@ const NumberDrawingGame = ({ levelData, onExit }) => {
                   const isOver = currentSum > h.sum;
                   return (
                     <div key={i} className={`nd-hint-text ${isCorrect ? 'nd-hint-correct' : isOver ? 'nd-hint-error' : ''}`}>
-                      {h.sum}
+                      <span style={{ fontSize: '0.75em', opacity: 0.7, marginRight: '1px' }}>{currentSum}/</span>{h.sum}
                     </div>
                   );
                 })}

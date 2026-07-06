@@ -43,16 +43,34 @@ const GAMES = [
     gradient: 'linear-gradient(135deg, #047857 0%, #064e3b 100%)',
     icon: '🔢',
     available: true,
+    underConstruction: true,
   },
-  // Future games
   {
-    key: 'future1',
-    title: 'Coming Soon',
-    subtitle: 'A new adventure',
-    description: "The next game in Trish's Games is being built. Stay tuned!",
-    gradient: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
-    icon: '🔮',
-    available: false,
+    key: 'battleship',
+    title: 'Battleship',
+    subtitle: 'Sink the enemy fleet',
+    description: 'Place your fleet and take turns firing at the enemy. Find and sink all 5 enemy ships before they sink yours.',
+    gradient: 'linear-gradient(135deg, #0f4c75 0%, #1b6ca8 100%)',
+    icon: '🚢',
+    available: true,
+  },
+  {
+    key: 'wordwager',
+    title: 'Word Wager',
+    subtitle: 'Bet your way to glory',
+    description: 'A definition is shown — guess the hidden word letter by letter. Wager money on each guess: correct earns, wrong costs double. Guess the whole word all-in to double your money!',
+    gradient: 'linear-gradient(135deg, #92400e 0%, #d97706 60%, #fbbf24 100%)',
+    icon: '💰',
+    available: true,
+  },
+  {
+    key: 'connect4',
+    title: 'Connect 4',
+    subtitle: 'Drop, connect, conquer',
+    description: 'Drop discs into the grid and be the first to connect four in a row — horizontally, vertically, or diagonally. Play against a sharp AI opponent.',
+    gradient: 'linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%)',
+    icon: '🔴',
+    available: true,
   },
 ];
 
@@ -85,6 +103,11 @@ const HomeScreen = ({ onSelectGame }) => {
               <div className="game-card-lock">
                 <span>🔒</span>
                 <span>Coming Soon</span>
+              </div>
+            )}
+            {game.underConstruction && (
+              <div className="game-card-construction">
+                🚧 Under Construction 🚧
               </div>
             )}
             <div className="game-card-play-hint">
