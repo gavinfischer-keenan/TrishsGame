@@ -1,3 +1,9 @@
+# Trish’s Games — public browser arcade
+
+Live: https://games.11mosswood.us/ . Six games, all computed in the visitor’s browser. Direct BrickSmack: https://games.11mosswood.us/#bricksmack . Source code is linked from the catalog. Names and fish logos will be added later.
+
+Build and installable/offline PWA instructions: [DEPLOYMENT.md](DEPLOYMENT.md). Run `npm ci`, `npm run build`, `npm test`; only serve dist/. Word Wager is play money with no purchases or payouts.
+
 # Trish's Games
 
 Welcome to **Trish's Games** — a premium, modern web-based gaming application hosting a collection of uniquely crafted games. Built with React, Vite, and custom Vanilla CSS.

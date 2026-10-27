@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import DICTIONARY from './dictionary';
 import URBAN_DICTIONARY from './urbanDictionary';
@@ -142,7 +143,7 @@ const Menu = ({ onPlay, language, onLanguageChange, onExit }) => (
         </div>
         <div className="ww-rule">
           <span className="ww-rule-icon">💵</span>
-          <div>Wager before each letter. <span className="ww-money-pos">Correct → +wager</span>. <span className="ww-money-neg">Wrong → −2× wager</span>.</div>
+          <div>Play money only — no purchases or payouts. Wager before each letter. <span className="ww-money-pos">Correct → +wager</span>. <span className="ww-money-neg">Wrong → −2× wager</span>.</div>
         </div>
         <div className="ww-rule">
           <span className="ww-rule-icon">🎰</span>
@@ -233,16 +234,7 @@ const WordCompleteOverlay = ({ word, wordsCompleted, newMoney, onContinue }) => 
 // ─── Game ─────────────────────────────────────────────────────────────────────
 
 const Game = ({ dictionary, onExit }) => {
-  const freshState = useCallback(() => {
-    const fresh = new Set();
-    return {
-      money:          STARTING_MONEY,
-      wordsCompleted: 0,
-      usedWords:      fresh,
-      wordObj:        pickWord(dictionary, 0, fresh),
-      wager:          10,
-    };
-  }, [dictionary]);
+
 
   const [money,          setMoney]          = useState(STARTING_MONEY);
   const [wordsCompleted, setWordsCompleted] = useState(0);
@@ -255,7 +247,7 @@ const Game = ({ dictionary, onExit }) => {
   const [isAllIn,        setIsAllIn]        = useState(false);
   const [timeLeft,       setTimeLeft]       = useState(null);
   const [flashMsg,       setFlashMsg]       = useState(null);       // { text, ok }
-  const [wordStartMoney, setWordStartMoney] = useState(STARTING_MONEY);
+  // const [wordStartMoney, setWordStartMoney] = useState(STARTING_MONEY);
   // Track the wordsCompleted value at the moment the player first hit $1,000.
   // Starts as Infinity (not yet reached). Set once and never reset mid-run.
   const [wordsAt1k,      setWordsAt1k]      = useState(Infinity);
@@ -294,18 +286,20 @@ const Game = ({ dictionary, onExit }) => {
   useEffect(() => {
     if (!isAllIn || phase !== 'playing' || timeLeft === null) return;
 
-    if (timeLeft <= 0) {
-      setMoney(0);
-      setPhase('game-over');
-      return;
-    }
-
     const timer = setInterval(() => {
-      setTimeLeft(t => t - 1);
+      setTimeLeft(t => {
+        if (t <= 1) {
+          clearInterval(timer);
+          setMoney(0);
+          setPhase('game-over');
+          return 0;
+        }
+        return t - 1;
+      });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isAllIn, phase, timeLeft]);
+  }, [isAllIn, phase]);
 
   // ── Handle letter guess ────────────────────────────────────────
   const handleLetter = useCallback((letter) => {

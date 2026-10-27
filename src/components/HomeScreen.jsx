@@ -36,16 +36,6 @@ const GAMES = [
     available: true,
   },
   {
-    key: 'numberdrawing',
-    title: 'Number Drawing',
-    subtitle: 'Reconstruct ASCII masterpieces',
-    description: 'Use the row and column sums alongside visual blob guides to deduce the hidden numbers and reveal the ASCII art.',
-    gradient: 'linear-gradient(135deg, #047857 0%, #064e3b 100%)',
-    icon: '🔢',
-    available: true,
-    underConstruction: true,
-  },
-  {
     key: 'battleship',
     title: 'Battleship',
     subtitle: 'Sink the enemy fleet',
@@ -58,7 +48,7 @@ const GAMES = [
     key: 'wordwager',
     title: 'Word Wager',
     subtitle: 'Bet your way to glory',
-    description: 'A definition is shown — guess the hidden word letter by letter. Wager money on each guess: correct earns, wrong costs double. Guess the whole word all-in to double your money!',
+    description: 'A definition is shown — guess the hidden word letter by letter. Wager play-money points on each guess: correct earns, wrong costs double. Guess the whole word all-in to double your points!',
     gradient: 'linear-gradient(135deg, #92400e 0%, #d97706 60%, #fbbf24 100%)',
     icon: '💰',
     available: true,
@@ -105,11 +95,6 @@ const HomeScreen = ({ onSelectGame }) => {
                 <span>Coming Soon</span>
               </div>
             )}
-            {game.underConstruction && (
-              <div className="game-card-construction">
-                🚧 Under Construction 🚧
-              </div>
-            )}
             <div className="game-card-play-hint">
               {game.available ? 'Click to Play →' : ''}
             </div>
@@ -118,7 +103,8 @@ const HomeScreen = ({ onSelectGame }) => {
       </div>
 
       <footer className="home-footer">
-        <p>More games coming soon ✨</p>
+        <p>Games run on your device. Word Wager uses play money only; no purchases or payouts.</p>
+        <p><a href="https://tripofisch.com/#games-layer">← TripoFisch Games</a> · <a href="https://github.com/gavinfischer-keenan/TrishsGame">Source code on GitHub ↗</a></p>
       </footer>
     </div>
   );

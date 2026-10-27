@@ -1,0 +1,9 @@
+services:
+  trishs-games:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trishs-games
+    restart: unless-stopped
+    ports:
+      - "8083:80"
