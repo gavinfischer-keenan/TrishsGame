@@ -8,7 +8,7 @@ const BrickSmackMenu = ({ onStartGame, onBack }) => {
       <div className="menu-content">
         <button className="btn-back-home" onClick={onBack}>← Back to Games</button>
         <div className="title-group">
-          <img className="namesake-menu-logo" src="/brand/pistol-shrimp-logo.jpg" alt="Pistol Shrimp logo" />
+          <img className="namesake-menu-logo" src="/brand/pistol-shrimp-logo-v2.jpg" alt="Pistol Shrimp logo" />
           <h2 className="namesake-animal">Pistol Shrimp</h2>
           <h1 className="game-title">Brick<span>Smack</span></h1>
           <a className="namesake-about" href="/about/pistol-shrimp/">About the Shrimp →</a>

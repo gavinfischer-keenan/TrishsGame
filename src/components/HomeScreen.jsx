@@ -10,7 +10,7 @@
 const GAMES = [
   {
     key: 'bricksmack',
-    animal: 'Pistol Shrimp', logo: '/brand/pistol-shrimp-logo.jpg',
+    animal: 'Pistol Shrimp', logo: '/brand/pistol-shrimp-logo-v2.jpg',
     title: 'BrickSmack',
     subtitle: 'Stack, clear, and score',
     description: 'Drop colorful blocks onto the grid. Clear full rows and columns to score big. Three modes of brick-busting fun.',
