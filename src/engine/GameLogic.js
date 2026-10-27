@@ -137,7 +137,7 @@ export const checkGameOver = (grid, availableBlocks) => {
       if (canPlaceThisBlock) break;
     }
     // If we found a place for this block, we continue checking others (wait, if ONE block can be placed, is it not game over? The rule says "The game ends instantly when you run out of space to place any of your remaining blocks." So if NO blocks can be placed, it's game over. Wait. "run out of space to place ANY of your remaining blocks" - this usually means if there's at least one block in your tray that cannot be placed ANYWHERE, game over. Let's re-read: "The game ends instantly when you run out of space to place any of your remaining blocks."
-    // In Block Blast, if you have 3 blocks, and 1 of them cannot be placed, the game ends immediately. You don't have to place the others first.
+    // In BrickSmack, if you have 3 blocks, and 1 of them cannot be placed, the game ends immediately. You don't have to place the others first.
     // So if for ANY block in availableBlocks, it CANNOT be placed anywhere, GAME OVER.
     if (!canPlaceThisBlock) {
       return true; // Game Over!

@@ -1,13 +1,13 @@
 /* eslint-disable */
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import DICTIONARY from './dictionary';
-import URBAN_DICTIONARY from './urbanDictionary';
+import WORLD_SLANG_DICTIONARY from './worldSlangDictionary';
 
 // ─── Language Config (future-proofed) ────────────────────────────────────────
 
 const LANGUAGES = [
   { code: 'en-US',  name: 'American English', flag: '🇺🇸', available: true,  dict: DICTIONARY },
-  { code: 'en-URB', name: 'World Slang',      flag: '🌍', available: true,  dict: URBAN_DICTIONARY },
+  { code: 'world-slang', name: 'World Slang',      flag: '🌍', available: true,  dict: WORLD_SLANG_DICTIONARY },
   { code: 'en-GB',  name: 'British English',  flag: '🇬🇧', available: false, dict: null },
   { code: 'es-ES',  name: 'Spanish',          flag: '🇪🇸', available: false, dict: null },
   { code: 'fr-FR',  name: 'French',           flag: '🇫🇷', available: false, dict: null },

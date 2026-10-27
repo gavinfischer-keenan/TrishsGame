@@ -1,4 +1,4 @@
-const URBAN_DICTIONARY = [
+const WORLD_SLANG_DICTIONARY = [
   {
     "word": "BUSSIN",
     "pos": "Adjective",
@@ -752,7 +752,7 @@ const URBAN_DICTIONARY = [
   {
     "word": "DOUBLEDOUBLE",
     "pos": "Noun",
-    "definition": "A coffee with two creams and two sugars, universally understood at any Tim Hortons across the country.",
+    "definition": "A coffee with two creams and two sugars, a common order at Canadian coffee shops.",
     "region": "Canada"
   },
   {
@@ -853,4 +853,4 @@ const URBAN_DICTIONARY = [
   }
 ];
 
-export default URBAN_DICTIONARY;
+export default WORLD_SLANG_DICTIONARY;

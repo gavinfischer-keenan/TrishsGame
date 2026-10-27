@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 /**
- * SlippedMyMindGame.jsx — Core Mastermind-style game component
+ * SlippedMyMindGame.jsx — Core code-breaking game component
  *
  * Rules:
  *   - Computer generates a 5-ball secret code from 6 colours.
@@ -119,7 +119,7 @@ const Ball = ({ colorId, size = 40, onClick, ring = false, dim = false, hintGlow
 };
 
 /**
- * 5 feedback pegs in a classic 3+2 Mastermind grid.
+ * 5 feedback pegs in a classic 3+2 Slipped My Mind grid.
  * ● dark  = exact (right colour, right slot)
  * ● light = close (right colour, wrong slot)
  * ○       = no match

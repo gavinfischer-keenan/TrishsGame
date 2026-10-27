@@ -63,7 +63,7 @@ const GAMES = [
     animal: 'Clown Triggerfish', logo: '/brand/clown-triggerfish-logo.jpg',
     title: 'Four in a Row',
     subtitle: 'Drop, connect, conquer',
-    description: 'Drop discs into the grid and be the first to connect four in a row — horizontally, vertically, or diagonally. Play against a sharp AI opponent.',
+    description: 'Drop discs into the grid and be the first to line up four discs — horizontally, vertically, or diagonally. Play against a sharp AI opponent.',
     gradient: 'linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%)',
     icon: '🔴',
     available: true,

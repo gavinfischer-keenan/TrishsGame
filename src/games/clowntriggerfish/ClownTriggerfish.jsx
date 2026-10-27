@@ -12,7 +12,7 @@ const AI_DEPTH = 5; // minimax search depth
 const TAUNTS = [
   'IS THAT ALL YOU\'VE GOT?',
   'TOO EASY. 😴',
-  'MAYBE TRY CHECKERS.',
+  'TRY A DIFFERENT APPROACH.',
   'PREDICTED THAT 4 MOVES AGO.',
   'COME BACK WHEN YOU\'VE PRACTISED.',
   'I WASN\'T EVEN TRYING.',
@@ -261,33 +261,33 @@ const ClownTriggerfish = ({ onExit }) => {
     : -1;
 
   return (
-    <div className="c4-root">
+    <div className="four-in-a-row-root">
       <div className="clown-brand"><img src="/brand/clown-triggerfish-logo.jpg" alt="Clown Triggerfish logo" /><div><h2>Clown Triggerfish</h2><a className="namesake-about" href="/about/clown-triggerfish/">About the Fish →</a></div></div>
       {/* ── Header ── */}
-      <div className="c4-header">
+      <div className="four-in-a-row-header">
         <button className="btn-exit" onClick={onExit}>← Exit</button>
-        <h1 className="c4-title">Four in a Row</h1>
-        <div className="c4-turn-badge">
+        <h1 className="four-in-a-row-title">Four in a Row</h1>
+        <div className="four-in-a-row-turn-badge">
           {phase === 'playing' && (
             turn === HUMAN
-              ? <span className="c4-badge c4-badge-human">🔴 Your Turn</span>
-              : <span className="c4-badge c4-badge-ai">🔵 AI Thinking…</span>
+              ? <span className="four-in-a-row-badge four-in-a-row-badge-human">🔴 Your Turn</span>
+              : <span className="four-in-a-row-badge four-in-a-row-badge-ai">🔵 AI Thinking…</span>
           )}
           {phase === 'win' && (
             winner.player === HUMAN
-              ? <span className="c4-badge c4-badge-human">🎉 You Win!</span>
-              : <span className="c4-badge c4-badge-ai">🤖 AI Wins!</span>
+              ? <span className="four-in-a-row-badge four-in-a-row-badge-human">🎉 You Win!</span>
+              : <span className="four-in-a-row-badge four-in-a-row-badge-ai">🤖 AI Wins!</span>
           )}
-          {phase === 'draw' && <span className="c4-badge c4-badge-draw">🤝 Draw!</span>}
+          {phase === 'draw' && <span className="four-in-a-row-badge four-in-a-row-badge-draw">🤝 Draw!</span>}
         </div>
       </div>
 
       {/* ── Drop indicator strip ── */}
-      <div className="c4-indicator-row">
+      <div className="four-in-a-row-indicator-row">
         {Array.from({ length: COLS }, (_, c) => (
-          <div key={c} className="c4-indicator-cell">
+          <div key={c} className="four-in-a-row-indicator-cell">
             {hoverCol === c && turn === HUMAN && phase === 'playing' && !colFull(board, c) && (
-              <div className="c4-indicator-disc c4-disc-human" />
+              <div className="four-in-a-row-indicator-disc four-in-a-row-disc-human" />
             )}
           </div>
         ))}
@@ -295,15 +295,15 @@ const ClownTriggerfish = ({ onExit }) => {
 
       {/* ── Board ── */}
       <div
-        className="c4-board"
+        className="four-in-a-row-board"
         onMouseLeave={() => setHoverCol(null)}
       >
         {/* Column click zones */}
-        <div className="c4-col-zones">
+        <div className="four-in-a-row-col-zones">
           {Array.from({ length: COLS }, (_, c) => (
             <div
               key={c}
-              className="c4-col-zone"
+              className="four-in-a-row-col-zone"
               onMouseEnter={() => setHoverCol(c)}
               onClick={() => handleColClick(c)}
             />
@@ -312,21 +312,21 @@ const ClownTriggerfish = ({ onExit }) => {
 
         {/* Grid */}
         {Array.from({ length: ROWS }, (_, r) => (
-          <div key={r} className="c4-row">
+          <div key={r} className="four-in-a-row-row">
             {Array.from({ length: COLS }, (_, c) => {
               const cell     = board[r][c];
               const isWin    = winSet.has(`${r}-${c}`);
               const isPreview = previewRow === r && hoverCol === c;
               const isDrop   = dropping && dropping.col === c && dropping.row === r;
 
-              let discCls = 'c4-disc c4-disc-empty';
-              if (cell === HUMAN) discCls = `c4-disc c4-disc-human ${isWin ? 'c4-disc-win' : ''}`;
-              if (cell === AI)    discCls = `c4-disc c4-disc-ai    ${isWin ? 'c4-disc-win' : ''}`;
-              if (isDrop)        discCls += ' c4-disc-drop';
-              if (isPreview && cell === EMPTY) discCls = 'c4-disc c4-disc-preview';
+              let discCls = 'four-in-a-row-disc four-in-a-row-disc-empty';
+              if (cell === HUMAN) discCls = `four-in-a-row-disc four-in-a-row-disc-human ${isWin ? 'four-in-a-row-disc-win' : ''}`;
+              if (cell === AI)    discCls = `four-in-a-row-disc four-in-a-row-disc-ai    ${isWin ? 'four-in-a-row-disc-win' : ''}`;
+              if (isDrop)        discCls += ' four-in-a-row-disc-drop';
+              if (isPreview && cell === EMPTY) discCls = 'four-in-a-row-disc four-in-a-row-disc-preview';
 
               return (
-                <div key={c} className="c4-cell">
+                <div key={c} className="four-in-a-row-cell">
                   <div className={discCls} />
                 </div>
               );
@@ -337,24 +337,24 @@ const ClownTriggerfish = ({ onExit }) => {
 
       {/* ── Play Again / Restart ── */}
       {(phase === 'win' || phase === 'draw') && (
-        <div className="c4-end-actions">
-          <button className="c4-btn-play-again" onClick={restart}>
+        <div className="four-in-a-row-end-actions">
+          <button className="four-in-a-row-btn-play-again" onClick={restart}>
             Play Again
           </button>
         </div>
       )}
       {phase === 'playing' && (
-        <div className="c4-end-actions">
-          <button className="c4-btn-restart" onClick={restart}>
+        <div className="four-in-a-row-end-actions">
+          <button className="four-in-a-row-btn-restart" onClick={restart}>
             ↺ Restart
           </button>
         </div>
       )}
       {/* ── Taunt overlay ── */}
       {taunt && (
-        <div className="c4-taunt-overlay" onClick={() => setTaunt(null)}>
-          <div className="c4-taunt-text">{taunt}</div>
-          <div className="c4-taunt-sub">click to dismiss</div>
+        <div className="four-in-a-row-taunt-overlay" onClick={() => setTaunt(null)}>
+          <div className="four-in-a-row-taunt-text">{taunt}</div>
+          <div className="four-in-a-row-taunt-sub">click to dismiss</div>
         </div>
       )}
     </div>

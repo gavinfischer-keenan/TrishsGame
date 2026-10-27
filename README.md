@@ -17,7 +17,7 @@ Stack, clear, and score in this premium block puzzle experience. Drop colorful b
 * **Play Normal**: The classic block puzzle experience.
 * **Color Coordinated**: Clearing lines of the same color awards massive score multipliers.
 * **Colorfully Rotate on This**: Adds block rotation (via Spacebar or on-screen buttons) and rewards massive color coordination bonuses.
-* **Features**: Multi-size grids (8x8, 16x16), custom smooth drag-and-drop mechanics, predictive snap shadows, and Tetris-style irregular shapes.
+* **Features**: Multi-size grids (8x8, 16x16), custom smooth drag-and-drop mechanics, predictive snap shadows, and irregular block shapes.
 
 ### 2. Build Me a River
 A strategic puzzle where you route the flow of water from a starting point to an endpoint. 
@@ -26,7 +26,7 @@ A strategic puzzle where you route the flow of water from a starting point to an
 * **Level System**: Play through multiple predefined levels scaling from 16x16 up to expansive 64x64 flood plains.
 
 ### 3. Slipped My Mind
-A modern take on the classic mastermind code-breaking game.
+A modern take on the classic Slipped My Mind code-breaking game.
 * **Gameplay**: The computer chooses a secret 5-ball code out of 6 possible vibrant colors.
 * **Deduction**: You have 15 guesses to crack the code.
 * **Feedback**: After each guess, the game tells you how many balls are the right color and in the right place, and how many are the right color but in the wrong place.

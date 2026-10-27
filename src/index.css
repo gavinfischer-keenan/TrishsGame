@@ -1120,7 +1120,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SLIPPED MY MIND — Mastermind-style code-breaking game
+   SLIPPED MY MIND — code-breaking code-breaking game
    Theme: deep purple / dark violet
    ═══════════════════════════════════════════════════════════════ */
 
@@ -1939,8 +1939,8 @@ body {
 
 /* ── Root layouts ───────────────────────────────────────────────── */
 
-.bs-setup,
-.bs-battle {
+.fleet-tactics-setup,
+.fleet-tactics-battle {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -1952,13 +1952,13 @@ body {
 
 /* ── Setup Header ───────────────────────────────────────────────── */
 
-.bs-setup-header {
+.fleet-tactics-setup-header {
   padding: 1.2rem 1.5rem 0.6rem;
   text-align: center;
   flex-shrink: 0;
 }
 
-.bs-phase-title {
+.fleet-tactics-phase-title {
   font-size: 1.8rem;
   font-weight: 800;
   background: linear-gradient(90deg, #60a5fa, #38bdf8);
@@ -1968,14 +1968,14 @@ body {
   margin-bottom: 0.2rem;
 }
 
-.bs-phase-sub {
+.fleet-tactics-phase-sub {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 /* ── Setup Body ─────────────────────────────────────────────────── */
 
-.bs-setup-body {
+.fleet-tactics-setup-body {
   flex: 1;
   display: flex;
   gap: 1.5rem;
@@ -1987,7 +1987,7 @@ body {
 
 /* ── Ship List ──────────────────────────────────────────────────── */
 
-.bs-ship-list {
+.fleet-tactics-ship-list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -1995,7 +1995,7 @@ body {
   flex-shrink: 0;
 }
 
-.bs-ship-list-title {
+.fleet-tactics-ship-list-title {
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -2004,7 +2004,7 @@ body {
   margin-bottom: 0.25rem;
 }
 
-.bs-ship-btn {
+.fleet-tactics-ship-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -2021,47 +2021,47 @@ body {
   text-align: left;
 }
 
-.bs-ship-btn:hover {
+.fleet-tactics-ship-btn:hover {
   border-color: rgba(96, 165, 250, 0.4);
   color: var(--text-main);
 }
 
-.bs-ship-btn-active {
+.fleet-tactics-ship-btn-active {
   border-color: #60a5fa;
   background: rgba(96, 165, 250, 0.12);
   color: #60a5fa;
 }
 
-.bs-ship-btn-placed {
+.fleet-tactics-ship-btn-placed {
   border-color: rgba(52, 211, 153, 0.4);
   color: #6ee7b7;
 }
 
-.bs-ship-btn-icon { font-size: 1rem; }
-.bs-ship-btn-name { flex: 1; }
-.bs-ship-btn-size {
+.fleet-tactics-ship-btn-icon { font-size: 1rem; }
+.fleet-tactics-ship-btn-name { flex: 1; }
+.fleet-tactics-ship-btn-size {
   font-size: 0.72rem;
   opacity: 0.6;
   background: rgba(255,255,255,0.07);
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
 }
-.bs-ship-btn-check {
+.fleet-tactics-ship-btn-check {
   color: #34d399;
   font-weight: 800;
 }
 
 /* ── Setup Controls ─────────────────────────────────────────────── */
 
-.bs-setup-controls {
+.fleet-tactics-setup-controls {
   margin-top: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.bs-orient-btn,
-.bs-randomize-btn {
+.fleet-tactics-orient-btn,
+.fleet-tactics-randomize-btn {
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   border: 1.5px solid rgba(255,255,255,0.12);
@@ -2074,22 +2074,22 @@ body {
   transition: all 0.15s;
 }
 
-.bs-orient-btn:hover,
-.bs-randomize-btn:hover {
+.fleet-tactics-orient-btn:hover,
+.fleet-tactics-randomize-btn:hover {
   background: rgba(255,255,255,0.12);
   border-color: rgba(255,255,255,0.22);
 }
 
 /* ── Setup Footer ───────────────────────────────────────────────── */
 
-.bs-setup-footer {
+.fleet-tactics-setup-footer {
   padding: 0.75rem 1.5rem 1rem;
   display: flex;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.bs-start-btn {
+.fleet-tactics-start-btn {
   padding: 0.75rem 2.5rem;
   border-radius: 12px;
   border: 1.5px solid rgba(255,255,255,0.1);
@@ -2102,7 +2102,7 @@ body {
   transition: all 0.2s;
 }
 
-.bs-start-btn-ready {
+.fleet-tactics-start-btn-ready {
   background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
   border-color: #38bdf8;
   color: white;
@@ -2110,14 +2110,14 @@ body {
   box-shadow: 0 6px 24px rgba(14, 165, 233, 0.4);
 }
 
-.bs-start-btn-ready:hover {
+.fleet-tactics-start-btn-ready:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(14, 165, 233, 0.5);
 }
 
 /* ── Battle Header ──────────────────────────────────────────────── */
 
-.bs-battle-header {
+.fleet-tactics-battle-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2128,7 +2128,7 @@ body {
   gap: 1rem;
 }
 
-.bs-battle-title {
+.fleet-tactics-battle-title {
   font-size: 1.1rem;
   font-weight: 800;
   background: linear-gradient(90deg, #60a5fa, #38bdf8);
@@ -2137,7 +2137,7 @@ body {
   background-clip: text;
 }
 
-.bs-turn-badge {
+.fleet-tactics-turn-badge {
   font-size: 0.82rem;
   font-weight: 700;
   padding: 0.3rem 0.8rem;
@@ -2145,13 +2145,13 @@ body {
   letter-spacing: 0.02em;
 }
 
-.bs-turn-you  { background: rgba(96,165,250,0.15); border: 1.5px solid rgba(96,165,250,0.4); color: #93c5fd; }
-.bs-turn-ai   { background: rgba(251,191,36,0.12);  border: 1.5px solid rgba(251,191,36,0.35); color: #fde68a; }
-.bs-turn-over { background: rgba(52,211,153,0.12);  border: 1.5px solid rgba(52,211,153,0.4);  color: #6ee7b7; }
+.fleet-tactics-turn-you  { background: rgba(96,165,250,0.15); border: 1.5px solid rgba(96,165,250,0.4); color: #93c5fd; }
+.fleet-tactics-turn-ai   { background: rgba(251,191,36,0.12);  border: 1.5px solid rgba(251,191,36,0.35); color: #fde68a; }
+.fleet-tactics-turn-over { background: rgba(52,211,153,0.12);  border: 1.5px solid rgba(52,211,153,0.4);  color: #6ee7b7; }
 
 /* ── Battle Main Area ───────────────────────────────────────────── */
 
-.bs-battle-main {
+.fleet-tactics-battle-main {
   flex: 1;
   display: flex;
   align-items: flex-start;
@@ -2162,14 +2162,14 @@ body {
   min-height: 0;
 }
 
-.bs-board-section {
+.fleet-tactics-board-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
 
-.bs-board-label {
+.fleet-tactics-board-label {
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -2179,12 +2179,12 @@ body {
 
 /* ── Board & Cells ──────────────────────────────────────────────── */
 
-.bs-setup-board-wrap {
+.fleet-tactics-setup-board-wrap {
   display: flex;
   align-items: flex-start;
 }
 
-.bs-board {
+.fleet-tactics-board {
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -2194,23 +2194,23 @@ body {
   padding: 2px;
 }
 
-.bs-label-row {
+.fleet-tactics-label-row {
   display: flex;
   gap: 1px;
 }
 
-.bs-row {
+.fleet-tactics-row {
   display: flex;
   gap: 1px;
 }
 
-.bs-label-corner {
+.fleet-tactics-label-corner {
   width: 22px;
   height: 22px;
   flex-shrink: 0;
 }
 
-.bs-label-cell {
+.fleet-tactics-label-cell {
   width: 34px;
   height: 22px;
   display: flex;
@@ -2223,12 +2223,12 @@ body {
 }
 
 /* Make row labels square */
-.bs-row .bs-label-cell {
+.fleet-tactics-row .fleet-tactics-label-cell {
   width: 22px;
   height: 34px;
 }
 
-.bs-cell {
+.fleet-tactics-cell {
   width: 34px;
   height: 34px;
   border-radius: 3px;
@@ -2239,30 +2239,30 @@ body {
 }
 
 /* Water (empty player cell) */
-.bs-cell-water {
+.fleet-tactics-cell-water {
   background: rgba(14, 50, 90, 0.7);
   border: 1px solid rgba(56, 189, 248, 0.08);
 }
 
 /* Ship on player board */
-.bs-cell-ship {
+.fleet-tactics-cell-ship {
   background: linear-gradient(135deg, #374151, #1f2937);
   border: 1px solid rgba(100, 116, 139, 0.5);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 /* Ship grab states (setup only) */
-.bs-cell-ship-grabbable {
+.fleet-tactics-cell-ship-grabbable {
   cursor: grab;
 }
 
-.bs-cell-ship-grabbable:hover {
+.fleet-tactics-cell-ship-grabbable:hover {
   background: linear-gradient(135deg, #475569, #334155);
   border-color: rgba(148, 163, 184, 0.7);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 0 6px rgba(96,165,250,0.3);
 }
 
-.bs-cell-ship-dragging {
+.fleet-tactics-cell-ship-dragging {
   cursor: grabbing;
   opacity: 0.35;
   background: linear-gradient(135deg, #1e3a5f, #0f2340);
@@ -2270,7 +2270,7 @@ body {
 }
 
 /* kbd hint */
-.bs-kbd {
+.fleet-tactics-kbd {
   display: inline-block;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.2);
@@ -2284,13 +2284,13 @@ body {
 }
 
 /* Enemy unknown cell */
-.bs-cell-unknown {
+.fleet-tactics-cell-unknown {
   background: rgba(14, 50, 90, 0.55);
   border: 1px solid rgba(56, 189, 248, 0.1);
   cursor: crosshair;
 }
 
-.bs-cell-unknown:hover {
+.fleet-tactics-cell-unknown:hover {
   background: rgba(56, 189, 248, 0.25);
   transform: scale(1.08);
   z-index: 2;
@@ -2298,13 +2298,13 @@ body {
 }
 
 /* Hit */
-.bs-cell-hit {
+.fleet-tactics-cell-hit {
   background: radial-gradient(circle, #dc2626 0%, #7f1d1d 100%);
   border: 1px solid #ef4444;
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
-.bs-cell-hit::after {
+.fleet-tactics-cell-hit::after {
   content: '✕';
   position: absolute;
   inset: 0;
@@ -2317,12 +2317,12 @@ body {
 }
 
 /* Miss */
-.bs-cell-miss {
+.fleet-tactics-cell-miss {
   background: rgba(30, 58, 95, 0.5);
   border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
-.bs-cell-miss::after {
+.fleet-tactics-cell-miss::after {
   content: '•';
   position: absolute;
   inset: 0;
@@ -2334,47 +2334,47 @@ body {
 }
 
 /* Sunk */
-.bs-cell-sunk {
+.fleet-tactics-cell-sunk {
   background: radial-gradient(circle, #7f1d1d 0%, #3b0a0a 100%) !important;
   border-color: #991b1b !important;
   box-shadow: 0 0 10px rgba(127, 29, 29, 0.6) !important;
 }
 
 /* Placement preview */
-.bs-cell-preview-valid {
+.fleet-tactics-cell-preview-valid {
   background: rgba(52, 211, 153, 0.35) !important;
   border-color: #34d399 !important;
   box-shadow: 0 0 6px rgba(52,211,153,0.4) !important;
 }
 
-.bs-cell-preview-invalid {
+.fleet-tactics-cell-preview-invalid {
   background: rgba(239, 68, 68, 0.3) !important;
   border-color: #ef4444 !important;
 }
 
 /* ── Sunk Ships Row ─────────────────────────────────────────────── */
 
-.bs-sunk-list {
+.fleet-tactics-sunk-list {
   display: flex;
   gap: 0.35rem;
   margin-top: 0.25rem;
 }
 
-.bs-sunk-ship {
+.fleet-tactics-sunk-ship {
   font-size: 1.3rem;
   opacity: 1;
   transition: all 0.3s;
   filter: drop-shadow(0 0 4px rgba(56,189,248,0.3));
 }
 
-.bs-sunk-ship-done {
+.fleet-tactics-sunk-ship-done {
   opacity: 0.22;
   filter: grayscale(1);
 }
 
 /* ── Battle Log ─────────────────────────────────────────────────── */
 
-.bs-log-panel {
+.fleet-tactics-log-panel {
   display: flex;
   flex-direction: column;
   width: 190px;
@@ -2386,7 +2386,7 @@ body {
   align-self: stretch;
 }
 
-.bs-log-title {
+.fleet-tactics-log-title {
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -2397,7 +2397,7 @@ body {
   flex-shrink: 0;
 }
 
-.bs-log-scroll {
+.fleet-tactics-log-scroll {
   flex: 1;
   overflow-y: auto;
   padding: 0.4rem 0.6rem;
@@ -2406,10 +2406,10 @@ body {
   gap: 0.3rem;
 }
 
-.bs-log-scroll::-webkit-scrollbar { width: 3px; }
-.bs-log-scroll::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.25); border-radius: 2px; }
+.fleet-tactics-log-scroll::-webkit-scrollbar { width: 3px; }
+.fleet-tactics-log-scroll::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.25); border-radius: 2px; }
 
-.bs-log-entry {
+.fleet-tactics-log-entry {
   font-size: 0.72rem;
   color: var(--text-muted);
   line-height: 1.3;
@@ -2417,13 +2417,13 @@ body {
   border-radius: 5px;
 }
 
-.bs-log-entry-new {
+.fleet-tactics-log-entry-new {
   color: var(--text-main);
   background: rgba(56,189,248,0.07);
-  animation: bs-log-flash 0.4s ease;
+  animation: fleet-tactics-log-flash 0.4s ease;
 }
 
-@keyframes bs-log-flash {
+@keyframes fleet-tactics-log-flash {
   from { background: rgba(56,189,248,0.2); }
   to   { background: rgba(56,189,248,0.07); }
 }
@@ -3144,7 +3144,7 @@ body {
    FOUR IN A ROW
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.c4-root {
+.four-in-a-row-root {
   min-height: 100vh;
   background: radial-gradient(ellipse at top, #1a0a2e 0%, #0f0817 60%, #060410 100%);
   display: flex;
@@ -3156,7 +3156,7 @@ body {
 }
 
 /* ── Header ── */
-.c4-header {
+.four-in-a-row-header {
   width: 100%;
   max-width: 560px;
   display: flex;
@@ -3166,7 +3166,7 @@ body {
   gap: 0.5rem;
 }
 
-.c4-title {
+.four-in-a-row-title {
   font-size: 1.6rem;
   font-weight: 900;
   background: linear-gradient(135deg, #f43f5e, #fb923c);
@@ -3177,11 +3177,11 @@ body {
   letter-spacing: -0.02em;
 }
 
-.c4-turn-badge {
+.four-in-a-row-turn-badge {
   flex-shrink: 0;
 }
 
-.c4-badge {
+.four-in-a-row-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -3192,32 +3192,32 @@ body {
   letter-spacing: 0.02em;
 }
 
-.c4-badge-human {
+.four-in-a-row-badge-human {
   background: rgba(239,68,68,0.18);
   border: 1px solid rgba(239,68,68,0.4);
   color: #f87171;
 }
 
-.c4-badge-ai {
+.four-in-a-row-badge-ai {
   background: rgba(234,179,8,0.18);
   border: 1px solid rgba(234,179,8,0.4);
   color: #fbbf24;
-  animation: c4-ai-pulse 1.2s ease-in-out infinite;
+  animation: four-in-a-row-ai-pulse 1.2s ease-in-out infinite;
 }
 
-.c4-badge-draw {
+.four-in-a-row-badge-draw {
   background: rgba(148,163,184,0.18);
   border: 1px solid rgba(148,163,184,0.4);
   color: #94a3b8;
 }
 
-@keyframes c4-ai-pulse {
+@keyframes four-in-a-row-ai-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.55; }
 }
 
 /* ── Indicator row (arrow above board) ── */
-.c4-indicator-row {
+.four-in-a-row-indicator-row {
   display: flex;
   width: 100%;
   max-width: 560px;
@@ -3225,28 +3225,28 @@ body {
   margin-bottom: 0.25rem;
 }
 
-.c4-indicator-cell {
+.four-in-a-row-indicator-cell {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.c4-indicator-disc {
+.four-in-a-row-indicator-disc {
   width: 18px;
   height: 18px;
   border-radius: 50%;
   opacity: 0.7;
-  animation: c4-bounce 0.5s ease-in-out infinite alternate;
+  animation: four-in-a-row-bounce 0.5s ease-in-out infinite alternate;
 }
 
-@keyframes c4-bounce {
+@keyframes four-in-a-row-bounce {
   from { transform: translateY(0); }
   to   { transform: translateY(5px); }
 }
 
 /* ── Board frame ── */
-.c4-board {
+.four-in-a-row-board {
   position: relative;
   background: linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 100%);
   border-radius: 18px;
@@ -3260,7 +3260,7 @@ body {
 }
 
 /* Invisible click zones per column — sit on top */
-.c4-col-zones {
+.four-in-a-row-col-zones {
   position: absolute;
   inset: 0;
   display: flex;
@@ -3269,20 +3269,20 @@ body {
   z-index: 5;
 }
 
-.c4-col-zone {
+.four-in-a-row-col-zone {
   flex: 1;
   cursor: pointer;
 }
 
 /* ── Rows & cells ── */
-.c4-row {
+.four-in-a-row-row {
   display: flex;
   gap: 6px;
   margin-bottom: 6px;
 }
-.c4-row:last-child { margin-bottom: 0; }
+.four-in-a-row-row:last-child { margin-bottom: 0; }
 
-.c4-cell {
+.four-in-a-row-cell {
   flex: 1;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -3298,23 +3298,23 @@ body {
 }
 
 /* ── Discs ── */
-.c4-disc {
+.four-in-a-row-disc {
   width: 88%;
   height: 88%;
   border-radius: 50%;
   transition: transform 0.15s;
 }
 
-.c4-disc-empty {
+.four-in-a-row-disc-empty {
   background: transparent;
 }
 
-.c4-disc-preview {
+.four-in-a-row-disc-preview {
   background: rgba(239,68,68,0.3);
   border: 2px dashed rgba(239,68,68,0.6);
 }
 
-.c4-disc-human {
+.four-in-a-row-disc-human {
   background: radial-gradient(circle at 35% 35%, #ff8fa3, #ef4444 55%, #9f1239);
   box-shadow:
     0 3px 8px rgba(239,68,68,0.5),
@@ -3322,7 +3322,7 @@ body {
     inset 0 2px 4px rgba(255,255,255,0.35);
 }
 
-.c4-disc-ai {
+.four-in-a-row-disc-ai {
   background: radial-gradient(circle at 35% 35%, #fef08a, #eab308 55%, #713f12);
   box-shadow:
     0 3px 8px rgba(234,179,8,0.5),
@@ -3331,39 +3331,39 @@ body {
 }
 
 /* Drop animation */
-.c4-disc-drop {
-  animation: c4-drop 0.3s cubic-bezier(0.36, 0, 0.66, -0.3) forwards;
+.four-in-a-row-disc-drop {
+  animation: four-in-a-row-drop 0.3s cubic-bezier(0.36, 0, 0.66, -0.3) forwards;
 }
 
-@keyframes c4-drop {
+@keyframes four-in-a-row-drop {
   0%   { transform: scaleY(0.6) translateY(-20%); opacity: 0.7; }
   70%  { transform: scaleY(1.08) translateY(3%); }
   100% { transform: scaleY(1) translateY(0); opacity: 1; }
 }
 
 /* Win highlight */
-.c4-disc-win {
-  animation: c4-win-pulse 0.7s ease-in-out infinite alternate;
+.four-in-a-row-disc-win {
+  animation: four-in-a-row-win-pulse 0.7s ease-in-out infinite alternate;
   box-shadow:
     0 0 0 3px #fff,
     0 0 20px 6px currentColor,
     inset 0 2px 4px rgba(255,255,255,0.5);
 }
 
-@keyframes c4-win-pulse {
+@keyframes four-in-a-row-win-pulse {
   0%   { transform: scale(1); }
   100% { transform: scale(1.12); }
 }
 
 /* ── Action buttons ── */
-.c4-end-actions {
+.four-in-a-row-end-actions {
   margin-top: 1.25rem;
   display: flex;
   gap: 1rem;
   justify-content: center;
 }
 
-.c4-btn-play-again {
+.four-in-a-row-btn-play-again {
   padding: 0.75rem 2.5rem;
   border-radius: 14px;
   border: none;
@@ -3377,12 +3377,12 @@ body {
   transition: all 0.2s;
 }
 
-.c4-btn-play-again:hover {
+.four-in-a-row-btn-play-again:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(225,29,72,0.6);
 }
 
-.c4-btn-restart {
+.four-in-a-row-btn-restart {
   padding: 0.5rem 1.5rem;
   border-radius: 10px;
   border: 1px solid rgba(148,163,184,0.25);
@@ -3394,13 +3394,13 @@ body {
   transition: all 0.2s;
 }
 
-.c4-btn-restart:hover {
+.four-in-a-row-btn-restart:hover {
   background: rgba(148,163,184,0.15);
   color: #cbd5e1;
 }
 
 /* ── AI Taunt overlay ── */
-.c4-taunt-overlay {
+.four-in-a-row-taunt-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -3410,10 +3410,10 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  animation: c4-taunt-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: four-in-a-row-taunt-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.c4-taunt-text {
+.four-in-a-row-taunt-text {
   font-size: clamp(2rem, 6vw, 4.5rem);
   font-weight: 900;
   color: #ef4444;
@@ -3425,10 +3425,10 @@ body {
     0 0 40px rgba(239, 68, 68, 0.8),
     0 0 80px rgba(239, 68, 68, 0.4),
     0 4px 12px rgba(0, 0, 0, 0.9);
-  animation: c4-taunt-shake 0.4s ease-in-out 0.25s;
+  animation: four-in-a-row-taunt-shake 0.4s ease-in-out 0.25s;
 }
 
-.c4-taunt-sub {
+.four-in-a-row-taunt-sub {
   margin-top: 2rem;
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.35);
@@ -3436,12 +3436,12 @@ body {
   text-transform: uppercase;
 }
 
-@keyframes c4-taunt-in {
+@keyframes four-in-a-row-taunt-in {
   from { opacity: 0; transform: scale(1.15); }
   to   { opacity: 1; transform: scale(1); }
 }
 
-@keyframes c4-taunt-shake {
+@keyframes four-in-a-row-taunt-shake {
   0%   { transform: translateX(0); }
   20%  { transform: translateX(-12px); }
   40%  { transform: translateX(12px); }
@@ -3456,4 +3456,4 @@ body {
 
 .smm-menu:has(.namesake-menu-logo),.ww-menu:has(.namesake-menu-logo){height:100dvh;min-height:0;overflow-y:auto;align-items:flex-start;padding:1rem}.smm-menu:has(.namesake-menu-logo) .smm-menu-content{gap:.65rem;margin:auto}.smm-menu:has(.namesake-menu-logo) .smm-menu-hero{display:none}.ww-menu:has(.namesake-menu-logo) .ww-menu-content{margin:auto}body:has(.smm-menu),body:has(.ww-menu),body:has(.river-level-select),body:has(.menu-container){touch-action:pan-y}.smm-menu,.ww-menu,.river-level-select,.menu-container{touch-action:pan-y}
 
-.clown-brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}.clown-brand img{width:60px;height:60px;object-fit:contain;border-radius:50%;background:#fff}.clown-brand h2{font-size:23px;color:#7dd3fc;margin:0}.c4-header{flex-wrap:wrap}.c4-title{font-size:1.4rem}.c4-board{background:linear-gradient(160deg,#0f3443,#10243d);border-color:#087d95}.c4-disc-ai{background:radial-gradient(circle at 33% 28%,#a5f3fc,#22d3ee 52%,#087d95)}.c4-badge-ai{background:#087d9533;border-color:#22d3ee66;color:#67e8f9}
+.clown-brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}.clown-brand img{width:60px;height:60px;object-fit:contain;border-radius:50%;background:#fff}.clown-brand h2{font-size:23px;color:#7dd3fc;margin:0}.four-in-a-row-header{flex-wrap:wrap}.four-in-a-row-title{font-size:1.4rem}.four-in-a-row-board{background:linear-gradient(160deg,#0f3443,#10243d);border-color:#087d95}.four-in-a-row-disc-ai{background:radial-gradient(circle at 33% 28%,#a5f3fc,#22d3ee 52%,#087d95)}.four-in-a-row-badge-ai{background:#087d9533;border-color:#22d3ee66;color:#67e8f9}

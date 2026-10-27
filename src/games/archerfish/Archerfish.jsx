@@ -110,15 +110,15 @@ const updateAIMemoryAfterHit = (memory, r, c, hitBoard) => {
 // ─── Setup Board Cell ─────────────────────────────────────────────────────────
 
 const SetupCell = ({ shipId, preview, previewValid, isDragging, onMouseDown, onMouseUp, onMouseEnter }) => {
-  let cls = 'bs-cell';
+  let cls = 'fleet-tactics-cell';
 
   if (preview) {
-    cls += previewValid ? ' bs-cell-preview-valid' : ' bs-cell-preview-invalid';
+    cls += previewValid ? ' fleet-tactics-cell-preview-valid' : ' fleet-tactics-cell-preview-invalid';
   } else if (shipId) {
-    cls += ' bs-cell-ship';
-    cls += isDragging ? ' bs-cell-ship-dragging' : ' bs-cell-ship-grabbable';
+    cls += ' fleet-tactics-cell-ship';
+    cls += isDragging ? ' fleet-tactics-cell-ship-dragging' : ' fleet-tactics-cell-ship-grabbable';
   } else {
-    cls += ' bs-cell-water';
+    cls += ' fleet-tactics-cell-water';
   }
 
   return (
@@ -136,18 +136,18 @@ const SetupCell = ({ shipId, preview, previewValid, isDragging, onMouseDown, onM
 const SetupBoard = ({ shipBoard, previewCells, draggingShipId, onCellMouseDown, onCellMouseUp, onCellHover, onBoardLeave }) => {
   return (
     <div
-      className="bs-board"
+      className="fleet-tactics-board"
       onMouseLeave={onBoardLeave}
     >
-      <div className="bs-label-row">
-        <div className="bs-label-corner" />
+      <div className="fleet-tactics-label-row">
+        <div className="fleet-tactics-label-corner" />
         {Array.from({ length: BOARD_SIZE }, (_, i) => (
-          <div key={i} className="bs-label-cell">{String.fromCharCode(65 + i)}</div>
+          <div key={i} className="fleet-tactics-label-cell">{String.fromCharCode(65 + i)}</div>
         ))}
       </div>
       {Array.from({ length: BOARD_SIZE }, (_, r) => (
-        <div key={r} className="bs-row">
-          <div className="bs-label-cell">{r + 1}</div>
+        <div key={r} className="fleet-tactics-row">
+          <div className="fleet-tactics-label-cell">{r + 1}</div>
           {Array.from({ length: BOARD_SIZE }, (_, c) => {
             const shipId  = shipBoard[r][c] || null;
             const prev    = previewCells.find(p => p.r === r && p.c === c);
@@ -173,17 +173,17 @@ const SetupBoard = ({ shipBoard, previewCells, draggingShipId, onCellMouseDown, 
 // ─── Battle Board Cell ────────────────────────────────────────────────────────
 
 const BattleCell = ({ state, shipId, isEnemy, isSunk, onClick, onMouseEnter }) => {
-  let cls = 'bs-cell';
+  let cls = 'fleet-tactics-cell';
   if (isEnemy) {
-    cls += ' bs-cell-enemy';
-    if (state === MISS) cls += ' bs-cell-miss';
-    else if (state === HIT) cls += isSunk ? ' bs-cell-sunk' : ' bs-cell-hit';
-    else cls += ' bs-cell-unknown';
+    cls += ' fleet-tactics-cell-enemy';
+    if (state === MISS) cls += ' fleet-tactics-cell-miss';
+    else if (state === HIT) cls += isSunk ? ' fleet-tactics-cell-sunk' : ' fleet-tactics-cell-hit';
+    else cls += ' fleet-tactics-cell-unknown';
   } else {
-    if (state === MISS) cls += ' bs-cell-miss';
-    else if (state === HIT) cls += isSunk ? ' bs-cell-sunk' : ' bs-cell-hit';
-    else if (shipId) cls += isSunk ? ' bs-cell-ship bs-cell-sunk' : ' bs-cell-ship';
-    else cls += ' bs-cell-water';
+    if (state === MISS) cls += ' fleet-tactics-cell-miss';
+    else if (state === HIT) cls += isSunk ? ' fleet-tactics-cell-sunk' : ' fleet-tactics-cell-hit';
+    else if (shipId) cls += isSunk ? ' fleet-tactics-cell-ship fleet-tactics-cell-sunk' : ' fleet-tactics-cell-ship';
+    else cls += ' fleet-tactics-cell-water';
   }
   return (
     <div
@@ -195,16 +195,16 @@ const BattleCell = ({ state, shipId, isEnemy, isSunk, onClick, onMouseEnter }) =
 };
 
 const BattleBoard = ({ shipBoard, hitBoard, isEnemy, onCellClick, disabled }) => (
-  <div className="bs-board">
-    <div className="bs-label-row">
-      <div className="bs-label-corner" />
+  <div className="fleet-tactics-board">
+    <div className="fleet-tactics-label-row">
+      <div className="fleet-tactics-label-corner" />
       {Array.from({ length: BOARD_SIZE }, (_, i) => (
-        <div key={i} className="bs-label-cell">{String.fromCharCode(65 + i)}</div>
+        <div key={i} className="fleet-tactics-label-cell">{String.fromCharCode(65 + i)}</div>
       ))}
     </div>
     {Array.from({ length: BOARD_SIZE }, (_, r) => (
-      <div key={r} className="bs-row">
-        <div className="bs-label-cell">{r + 1}</div>
+      <div key={r} className="fleet-tactics-row">
+        <div className="fleet-tactics-label-cell">{r + 1}</div>
         {Array.from({ length: BOARD_SIZE }, (_, c) => {
           const shipId = shipBoard ? shipBoard[r][c] : null;
           const state  = hitBoard  ? hitBoard[r][c]  : EMPTY;
@@ -379,44 +379,44 @@ const SetupPhase = ({ onReady, onExit }) => {
   };
 
   return (
-    <div className="bs-setup" style={{ position: 'relative' }}>
+    <div className="fleet-tactics-setup" style={{ position: 'relative' }}>
       <div style={{ width: '100%', padding: '1rem', position: 'absolute', top: 0, left: 0, zIndex: 10 }}>
         <button className="btn-exit" onClick={onExit}>← Exit</button>
       </div>
-      <div className="bs-setup-header">
+      <div className="fleet-tactics-setup-header">
         <div className="namesake-fleet-brand"><img src="/brand/archerfish-logo.jpg" alt="Archerfish logo" /><div><h1>Archerfish</h1><p>Fleet Tactics · Deploy your fleet</p><a className="namesake-about" href="/about/archerfish/">About the Fish →</a></div></div>
-        <p className="bs-phase-sub">
-          Click an empty cell to place · <strong>Drag</strong> placed ships to reposition · <kbd className="bs-kbd">Space</kbd> to rotate
+        <p className="fleet-tactics-phase-sub">
+          Click an empty cell to place · <strong>Drag</strong> placed ships to reposition · <kbd className="fleet-tactics-kbd">Space</kbd> to rotate
         </p>
       </div>
 
-      <div className="bs-setup-body">
+      <div className="fleet-tactics-setup-body">
         {/* Ship list sidebar */}
-        <div className="bs-ship-list">
-          <div className="bs-ship-list-title">Your Fleet</div>
+        <div className="fleet-tactics-ship-list">
+          <div className="fleet-tactics-ship-list-title">Your Fleet</div>
           {SHIPS.map(ship => (
             <button
               key={ship.id}
-              className={`bs-ship-btn ${selectedShip === ship.id ? 'bs-ship-btn-active' : ''} ${placed[ship.id] ? 'bs-ship-btn-placed' : ''}`}
+              className={`fleet-tactics-ship-btn ${selectedShip === ship.id ? 'fleet-tactics-ship-btn-active' : ''} ${placed[ship.id] ? 'fleet-tactics-ship-btn-placed' : ''}`}
               onClick={() => setSelectedShip(ship.id)}
             >
-              <span className="bs-ship-btn-icon">{ship.icon}</span>
-              <span className="bs-ship-btn-name">{ship.name}</span>
-              <span className="bs-ship-btn-size">{ship.size}</span>
-              {placed[ship.id] && <span className="bs-ship-btn-check">✓</span>}
+              <span className="fleet-tactics-ship-btn-icon">{ship.icon}</span>
+              <span className="fleet-tactics-ship-btn-name">{ship.name}</span>
+              <span className="fleet-tactics-ship-btn-size">{ship.size}</span>
+              {placed[ship.id] && <span className="fleet-tactics-ship-btn-check">✓</span>}
             </button>
           ))}
 
-          <div className="bs-setup-controls">
-            <button className="bs-orient-btn" onClick={() => setHoriz(h => !h)}>
+          <div className="fleet-tactics-setup-controls">
+            <button className="fleet-tactics-orient-btn" onClick={() => setHoriz(h => !h)}>
               {horiz ? '↔ Horizontal' : '↕ Vertical'}
             </button>
-            <button className="bs-randomize-btn" onClick={handleRandomize}>🎲 Random</button>
+            <button className="fleet-tactics-randomize-btn" onClick={handleRandomize}>🎲 Random</button>
           </div>
         </div>
 
         {/* Board */}
-        <div className="bs-setup-board-wrap">
+        <div className="fleet-tactics-setup-board-wrap">
           <SetupBoard
             shipBoard={playerBoard}
             previewCells={previewCells}
@@ -429,9 +429,9 @@ const SetupPhase = ({ onReady, onExit }) => {
         </div>
       </div>
 
-      <div className="bs-setup-footer">
+      <div className="fleet-tactics-setup-footer">
         <button
-          className={`bs-start-btn ${allPlaced ? 'bs-start-btn-ready' : ''}`}
+          className={`fleet-tactics-start-btn ${allPlaced ? 'fleet-tactics-start-btn-ready' : ''}`}
           disabled={!allPlaced}
           onClick={() => onReady(playerBoard)}
         >
@@ -510,18 +510,18 @@ const BattlePhase = ({ playerBoard, onExit }) => {
   const aiSunk     = SHIPS.filter(s => isShipSunk(s.id, aiBoard, aiHitBoard));
 
   return (
-    <div className="bs-battle">
-      <div className="bs-battle-header">
+    <div className="fleet-tactics-battle">
+      <div className="fleet-tactics-battle-header">
         <button className="btn-exit" onClick={onExit}>← Exit</button>
-        <div className="bs-battle-title">⚓ <span>Archerfish · Fleet Tactics</span></div>
-        <div className={`bs-turn-badge ${turn === 'player' ? 'bs-turn-you' : turn === 'ai' ? 'bs-turn-ai' : 'bs-turn-over'}`}>
+        <div className="fleet-tactics-battle-title">⚓ <span>Archerfish · Fleet Tactics</span></div>
+        <div className={`fleet-tactics-turn-badge ${turn === 'player' ? 'fleet-tactics-turn-you' : turn === 'ai' ? 'fleet-tactics-turn-ai' : 'fleet-tactics-turn-over'}`}>
           {turn === 'player' ? '🎯 Your Turn' : turn === 'ai' ? '🤖 AI Thinking…' : winner === 'player' ? '🏆 Victory!' : '💀 Defeated'}
         </div>
       </div>
 
-      <div className="bs-battle-main">
-        <div className="bs-board-section">
-          <div className="bs-board-label">Enemy Waters — click to fire!</div>
+      <div className="fleet-tactics-battle-main">
+        <div className="fleet-tactics-board-section">
+          <div className="fleet-tactics-board-label">Enemy Waters — click to fire!</div>
           <BattleBoard
             shipBoard={aiBoard}
             hitBoard={aiHitBoard}
@@ -529,35 +529,35 @@ const BattlePhase = ({ playerBoard, onExit }) => {
             onCellClick={handlePlayerFire}
             disabled={turn !== 'player'}
           />
-          <div className="bs-sunk-list">
+          <div className="fleet-tactics-sunk-list">
             {SHIPS.map(s => (
-              <span key={s.id} className={`bs-sunk-ship ${aiSunk.some(ss => ss.id === s.id) ? 'bs-sunk-ship-done' : ''}`}>
+              <span key={s.id} className={`fleet-tactics-sunk-ship ${aiSunk.some(ss => ss.id === s.id) ? 'fleet-tactics-sunk-ship-done' : ''}`}>
                 {s.icon}
               </span>
             ))}
           </div>
         </div>
 
-        <div className="bs-log-panel">
-          <div className="bs-log-title">📡 Battle Log</div>
-          <div className="bs-log-scroll">
+        <div className="fleet-tactics-log-panel">
+          <div className="fleet-tactics-log-title">📡 Battle Log</div>
+          <div className="fleet-tactics-log-scroll">
             {log.map((entry, i) => (
-              <div key={i} className={`bs-log-entry ${i === 0 ? 'bs-log-entry-new' : ''}`}>{entry}</div>
+              <div key={i} className={`fleet-tactics-log-entry ${i === 0 ? 'fleet-tactics-log-entry-new' : ''}`}>{entry}</div>
             ))}
           </div>
         </div>
 
-        <div className="bs-board-section">
-          <div className="bs-board-label">Your Waters — defend!</div>
+        <div className="fleet-tactics-board-section">
+          <div className="fleet-tactics-board-label">Your Waters — defend!</div>
           <BattleBoard
             shipBoard={playerBoard}
             hitBoard={playerHitBoard}
             isEnemy={false}
             disabled={true}
           />
-          <div className="bs-sunk-list">
+          <div className="fleet-tactics-sunk-list">
             {SHIPS.map(s => (
-              <span key={s.id} className={`bs-sunk-ship ${playerSunk.some(ss => ss.id === s.id) ? 'bs-sunk-ship-done' : ''}`}>
+              <span key={s.id} className={`fleet-tactics-sunk-ship ${playerSunk.some(ss => ss.id === s.id) ? 'fleet-tactics-sunk-ship-done' : ''}`}>
                 {s.icon}
               </span>
             ))}
