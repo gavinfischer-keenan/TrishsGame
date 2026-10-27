@@ -50,7 +50,7 @@ const GAMES = [
   },
   {
     key: 'wordwager',
-    animal: 'Alphabet Cone Snail', logo: '/brand/alphabet-cone-snail-logo.jpg',
+    animal: 'Alphabet Cone Snail', logo: '/brand/alphabet-cone-snail-logo-v2.jpg',
     title: 'Word Wager',
     subtitle: 'Bet your way to glory',
     description: 'A definition is shown — guess the hidden word letter by letter. Wager play-money points on each guess: correct earns, wrong costs double. Guess the whole word all-in to double your points!',
