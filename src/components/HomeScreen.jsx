@@ -20,7 +20,7 @@ const GAMES = [
   },
   {
     key: 'buildmeariver',
-    animal: 'Mudskipper', logo: '/brand/mudskipper-logo.jpg',
+    animal: 'Mudskipper', logo: '/brand/mudskipper-logo-v2.jpg',
     title: 'Build Me a River',
     subtitle: 'Route the flow',
     description: 'Connect the source to the sea. Place river tiles to build a flowing path past rocks, houses, and trees.',

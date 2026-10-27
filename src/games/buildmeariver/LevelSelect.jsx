@@ -19,7 +19,7 @@ const LevelSelect = ({ onSelectLevel, onBack }) => {
       <header className="river-ls-header">
         <button className="btn-back-home" onClick={onBack}>← Back to Games</button>
         <div className="river-title-group">
-          <img className="namesake-menu-logo" src="/brand/mudskipper-logo.jpg" alt="Mudskipper logo" />
+          <img className="namesake-menu-logo" src="/brand/mudskipper-logo-v2.jpg" alt="Mudskipper logo" />
           <h2 className="namesake-animal">Mudskipper</h2>
           <h1 className="river-title">Build Me a River</h1>
           <a className="namesake-about" href="/about/mudskipper/">About the Fish →</a>
