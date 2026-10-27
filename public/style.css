@@ -60,3 +60,15 @@ html:has(.layer-nav){scroll-behavior:smooth}.layer-nav{position:fixed;left:14px;
 .source-code-section{border-top:1px solid #dce5e9;margin:30px 0;padding:22px 0}.source-code-section h2{font-size:22px;margin:0 0 10px}.source-code-section p{font-size:14px;color:#657080}.source-code-section a{font-size:14px;text-decoration:underline;text-underline-offset:3px}
 
 .animal-directory{list-style:none;padding:0;margin:0 0 5rem;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 2.5rem}.animal-directory li{border-bottom:1px solid #dce5e9}.animal-directory a{display:flex;justify-content:space-between;padding:1.1rem 0;text-decoration:none;color:#17243d}.animal-directory a:hover{color:#087d95}.animal-directory a:focus-visible{outline:2px solid #087d95;outline-offset:4px}@media(max-width:650px){.animal-directory{grid-template-columns:1fr}}
+
+.station-hardware,.station-photos,.station-resources,.station-local{margin:0 0 3.5rem}.hardware-summary{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #dce5e9;margin:1.5rem 0}.hardware-summary>div{padding:1rem 1.2rem 1rem 0;border-bottom:1px solid #dce5e9}.hardware-summary dt{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#5e737d;margin-bottom:.35rem}.hardware-summary dd{margin:0;color:#17243d}.station-table-wrap{overflow-x:auto;margin:1.5rem 0}.station-channels{width:100%;border-collapse:collapse;text-align:left}.station-channels caption{text-align:left;font-weight:700;margin-bottom:.8rem}.station-channels th,.station-channels td{padding:.85rem .7rem;border-bottom:1px solid #dce5e9}.station-channels thead th{background:#f5fafb;font-size:.85rem}.station-channels a{white-space:nowrap}.station-photo-placeholder{padding:2rem;border:1px dashed #aebfc7;background:#f5fafb}.station-photo-placeholder p:last-child{margin-bottom:0}.station-resource-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem}.station-resource-grid ul{padding-left:1.2rem}.station-resource-grid li{margin-bottom:.9rem}@media(max-width:650px){.hardware-summary,.station-resource-grid{grid-template-columns:1fr}.station-channels{font-size:.85rem}}
+
+.product-parent-link{display:inline-flex;align-items:center;gap:.6rem;color:#647783;text-decoration:none;font-size:.76rem;font-weight:500;line-height:1.25}.product-parent-link img{width:36px;height:36px;object-fit:contain}.product-parent-link:hover{color:#087d95}.product-parent-link:focus-visible{outline:2px solid #087d95;outline-offset:5px}.product-site .page-meta{justify-content:flex-end}.station-setup-intro .shake-resource-links a.action-link{color:#fff;text-decoration:none}
+
+/* Informational-page section rail; app workspaces keep their own layout. */
+.page-section-nav{top:50%;transform:translateY(-50%);max-height:calc(100dvh - 48px);overflow-y:auto;overscroll-behavior:contain}
+main :is(h1,h2)[id]{scroll-margin-top:24px}
+@media(max-width:700px){
+ .page-section-nav{top:auto;transform:none;max-height:none;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;gap:8px;scrollbar-width:thin}
+ .page-section-nav a{flex:0 0 auto;max-width:230px}
+}
