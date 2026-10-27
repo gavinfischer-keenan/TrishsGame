@@ -131,8 +131,10 @@ const Menu = ({ onPlay, language, onLanguageChange, onExit }) => (
     </div>
     <div className="ww-menu-content">
       <div className="ww-menu-hero">
-        <div className="ww-menu-icon">💰</div>
+        <img className="namesake-menu-logo" src="/brand/alphabet-cone-snail-logo.jpg" alt="Alphabet Cone Snail logo" />
+        <h2 className="namesake-animal">Alphabet Cone Snail</h2>
         <h1 className="ww-menu-title">Word Wager</h1>
+        <a className="namesake-about" href="/about/alphabet-cone-snail/">About the Snail →</a>
         <p className="ww-menu-tagline">Bet your way to glory — or bust</p>
       </div>
 

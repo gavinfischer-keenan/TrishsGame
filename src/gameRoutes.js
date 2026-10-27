@@ -5,7 +5,7 @@ const HASH_MAP = {
   'river': 'buildmeariver',
   'slippedmymind': 'slippedmymind',
   'mind': 'slippedmymind',
-  'battleship': 'battleship',
+  'archerfish': 'archerfish',
   'wordwager': 'wordwager',
   'word': 'wordwager',
   'connect4': 'connect4'

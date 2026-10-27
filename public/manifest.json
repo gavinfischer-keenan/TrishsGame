@@ -1,7 +1,7 @@
 {
   "name": "Trish's Games - Arcade",
   "short_name": "Trish's Games",
-  "description": "100% Client-side arcade games: BrickSmack, Build Me a River, Slipped My Mind, Battleship, Word Wager, Connect 4",
+  "description": "Client-side arcade: Pistol Shrimp / BrickSmack, Mudskipper / Build Me a River, Slipped My Mind, Archerfish / Fleet Tactics, Alphabet Cone Snail / Word Wager, Connect 4",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -4,7 +4,7 @@ import HomeScreen from './components/HomeScreen';
 import BrickSmack from './games/bricksmack/BrickSmack';
 import BuildMeARiver from './games/buildmeariver/BuildMeARiver';
 import SlippedMyMind from './games/slippedmymind/SlippedMyMind';
-import Battleship from './games/battleship/Battleship';
+import Archerfish from './games/archerfish/Archerfish';
 import WordWager from './games/wordwager/WordWager';
 import Connect4 from './games/connect4/Connect4';
 
@@ -38,7 +38,7 @@ function App() {
       {currentGame === 'bricksmack'    && <BrickSmack    onExit={handleExit} />}
       {currentGame === 'buildmeariver' && <BuildMeARiver onExit={handleExit} />}
       {currentGame === 'slippedmymind' && <SlippedMyMind onExit={handleExit} />}
-      {currentGame === 'battleship'    && <Battleship    onExit={handleExit} />}
+      {currentGame === 'archerfish'    && <Archerfish    onExit={handleExit} />}
       {currentGame === 'wordwager'     && <WordWager     onExit={handleExit} />}
       {currentGame === 'connect4'      && <Connect4      onExit={handleExit} />}
       {!currentGame && <HomeScreen onSelectGame={handleSelectGame} />}

@@ -9,7 +9,7 @@ const MISS  = 3;
 
 const SHIPS = [
   { id: 'carrier',    name: 'Carrier',    size: 5, icon: '🛸' },
-  { id: 'battleship', name: 'Battleship', size: 4, icon: '⚓' },
+  { id: 'heavy-cruiser', name: 'Heavy Cruiser', size: 4, icon: '⚓' },
   { id: 'cruiser',    name: 'Cruiser',    size: 3, icon: '🚢' },
   { id: 'submarine',  name: 'Submarine',  size: 3, icon: '🤿' },
   { id: 'destroyer',  name: 'Destroyer',  size: 2, icon: '⚡' },
@@ -384,7 +384,7 @@ const SetupPhase = ({ onReady, onExit }) => {
         <button className="btn-exit" onClick={onExit}>← Exit</button>
       </div>
       <div className="bs-setup-header">
-        <h2 className="bs-phase-title">⚓ Deploy Your Fleet</h2>
+        <div className="namesake-fleet-brand"><img src="/brand/archerfish-logo.jpg" alt="Archerfish logo" /><div><h1>Archerfish</h1><p>Fleet Tactics · Deploy your fleet</p><a className="namesake-about" href="/about/archerfish/">About the Fish →</a></div></div>
         <p className="bs-phase-sub">
           Click an empty cell to place · <strong>Drag</strong> placed ships to reposition · <kbd className="bs-kbd">Space</kbd> to rotate
         </p>
@@ -513,7 +513,7 @@ const BattlePhase = ({ playerBoard, onExit }) => {
     <div className="bs-battle">
       <div className="bs-battle-header">
         <button className="btn-exit" onClick={onExit}>← Exit</button>
-        <div className="bs-battle-title">⚓ <span>Battleship</span></div>
+        <div className="bs-battle-title">⚓ <span>Archerfish · Fleet Tactics</span></div>
         <div className={`bs-turn-badge ${turn === 'player' ? 'bs-turn-you' : turn === 'ai' ? 'bs-turn-ai' : 'bs-turn-over'}`}>
           {turn === 'player' ? '🎯 Your Turn' : turn === 'ai' ? '🤖 AI Thinking…' : winner === 'player' ? '🏆 Victory!' : '💀 Defeated'}
         </div>
@@ -583,7 +583,7 @@ const BattlePhase = ({ playerBoard, onExit }) => {
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
-const Battleship = ({ onExit }) => {
+const Archerfish = ({ onExit }) => {
   const [phase, setPhase]             = useState('setup');
   const [playerBoard, setPlayerBoard] = useState(null);
 
@@ -593,4 +593,4 @@ const Battleship = ({ onExit }) => {
   return <BattlePhase playerBoard={playerBoard} onExit={onExit} />;
 };
 
-export default Battleship;
+export default Archerfish;

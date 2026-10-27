@@ -1933,7 +1933,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   BATTLESHIP
+   ARCHERFISH
    Theme: Deep ocean — navy blues, steel greys, amber accents
    ═══════════════════════════════════════════════════════════════ */
 
@@ -3449,3 +3449,9 @@ body {
   80%  { transform: translateX(8px); }
   100% { transform: translateX(0); }
 }
+
+.game-card-logo{display:block;width:84px;height:84px;object-fit:contain;background:white;border-radius:50%;margin-bottom:14px}.game-card-product{font-size:15px;font-weight:700;margin:4px 0;color:white}.namesake-menu-logo{display:block;width:94px;height:94px;object-fit:contain;border-radius:50%;background:white;margin:0 auto 8px}.namesake-animal{font-size:22px;color:#cbd5e1;margin:4px 0}.namesake-about{display:inline-block;color:#93dce9;font-size:12px;margin-top:5px;text-decoration:underline;text-underline-offset:3px}.namesake-fleet-brand{display:flex;align-items:center;justify-content:center;gap:14px}.namesake-fleet-brand img{width:64px;height:64px;object-fit:contain;border-radius:50%;background:white}.namesake-fleet-brand h1{font-size:25px;margin:0;color:#7dd3fc}.namesake-fleet-brand p{font-size:13px}.animal-links a{color:#a5d8ff}.home-container{touch-action:pan-y}body:has(.home-container){touch-action:pan-y}
+
+.menu-container:has(.namesake-menu-logo){padding:1rem;overflow-y:auto}.menu-content:has(.namesake-menu-logo){padding:1.4rem;margin:auto}.menu-content:has(.namesake-menu-logo) .title-group{margin-bottom:1rem}.menu-content:has(.namesake-menu-logo) .game-title{font-size:2.6rem}.menu-content:has(.namesake-menu-logo) .namesake-menu-logo{width:76px;height:76px}.namesake-menu-logo,.game-card-logo{flex-shrink:0}
+
+.smm-menu:has(.namesake-menu-logo),.ww-menu:has(.namesake-menu-logo){height:100dvh;min-height:0;overflow-y:auto;align-items:flex-start;padding:1rem}.smm-menu:has(.namesake-menu-logo) .smm-menu-content{gap:.65rem;margin:auto}.smm-menu:has(.namesake-menu-logo) .smm-menu-hero{display:none}.ww-menu:has(.namesake-menu-logo) .ww-menu-content{margin:auto}body:has(.smm-menu),body:has(.ww-menu),body:has(.river-level-select),body:has(.menu-container){touch-action:pan-y}.smm-menu,.ww-menu,.river-level-select,.menu-container{touch-action:pan-y}

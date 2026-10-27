@@ -32,7 +32,10 @@ const SlippedMyMindMenu = ({ onPlay, onBack }) => (
         {DEMO_COLOURS.map((c, i) => <DemoBall key={i} col={c} />)}
       </div>
 
+      <img className="namesake-menu-logo" src="/brand/peacock-mantis-shrimp-logo.jpg" alt="Peacock Mantis Shrimp logo" />
+      <h2 className="namesake-animal">Peacock Mantis Shrimp</h2>
       <h1 className="smm-menu-title">Slipped My Mind</h1>
+      <a className="namesake-about" href="/about/peacock-mantis-shrimp/">About the Mantis Shrimp →</a>
       <p className="smm-menu-tagline">A modern take on the classic code-breaking game</p>
 
       <p className="smm-menu-desc">
