@@ -167,7 +167,7 @@ function bestAIMove(board) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const Connect4 = ({ onExit }) => {
+const ClownTriggerfish = ({ onExit }) => {
   const [board,    setBoard]    = useState(() => emptyBoard());
   const [turn,     setTurn]     = useState(HUMAN);
   const [phase,    setPhase]    = useState('playing');
@@ -262,15 +262,16 @@ const Connect4 = ({ onExit }) => {
 
   return (
     <div className="c4-root">
+      <div className="clown-brand"><img src="/brand/clown-triggerfish-logo.jpg" alt="Clown Triggerfish logo" /><div><h2>Clown Triggerfish</h2><a className="namesake-about" href="/about/clown-triggerfish/">About the Fish →</a></div></div>
       {/* ── Header ── */}
       <div className="c4-header">
         <button className="btn-exit" onClick={onExit}>← Exit</button>
-        <h1 className="c4-title">Connect 4</h1>
+        <h1 className="c4-title">Four in a Row</h1>
         <div className="c4-turn-badge">
           {phase === 'playing' && (
             turn === HUMAN
               ? <span className="c4-badge c4-badge-human">🔴 Your Turn</span>
-              : <span className="c4-badge c4-badge-ai">🟡 AI Thinking…</span>
+              : <span className="c4-badge c4-badge-ai">🔵 AI Thinking…</span>
           )}
           {phase === 'win' && (
             winner.player === HUMAN
@@ -360,4 +361,4 @@ const Connect4 = ({ onExit }) => {
   );
 };
 
-export default Connect4;
+export default ClownTriggerfish;

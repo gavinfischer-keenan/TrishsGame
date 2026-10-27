@@ -59,8 +59,9 @@ const GAMES = [
     available: true,
   },
   {
-    key: 'connect4',
-    title: 'Connect 4',
+    key: 'clowntriggerfish',
+    animal: 'Clown Triggerfish', logo: '/brand/clown-triggerfish-logo.jpg',
+    title: 'Four in a Row',
     subtitle: 'Drop, connect, conquer',
     description: 'Drop discs into the grid and be the first to connect four in a row — horizontally, vertically, or diagonally. Play against a sharp AI opponent.',
     gradient: 'linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%)',
@@ -109,7 +110,7 @@ const HomeScreen = ({ onSelectGame }) => {
       </div>
 
       <footer className="home-footer">
-        <p className="animal-links"><a href="/about/peacock-mantis-shrimp/">About Peacock Mantis Shrimp</a> · <a href="/about/alphabet-cone-snail/">About Alphabet Cone Snails</a> · <a href="/about/pistol-shrimp/">About Pistol Shrimp</a> · <a href="/about/mudskipper/">About Mudskippers</a> · <a href="/about/archerfish/">About Archerfish</a></p>
+        <p className="animal-links"><a href="/about/clown-triggerfish/">About Clown Triggerfish</a> · <a href="/about/peacock-mantis-shrimp/">About Peacock Mantis Shrimp</a> · <a href="/about/alphabet-cone-snail/">About Alphabet Cone Snails</a> · <a href="/about/pistol-shrimp/">About Pistol Shrimp</a> · <a href="/about/mudskipper/">About Mudskippers</a> · <a href="/about/archerfish/">About Archerfish</a></p>
         <p>Games run on your device. Word Wager uses play money only; no purchases or payouts.</p>
         <p><a href="https://tripofisch.com/#games-layer">← TripoFisch Games</a> · <a href="https://github.com/gavinfischer-keenan/TrishsGame">Source code on GitHub ↗</a></p>
       </footer>

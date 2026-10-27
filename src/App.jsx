@@ -6,7 +6,7 @@ import BuildMeARiver from './games/buildmeariver/BuildMeARiver';
 import SlippedMyMind from './games/slippedmymind/SlippedMyMind';
 import Archerfish from './games/archerfish/Archerfish';
 import WordWager from './games/wordwager/WordWager';
-import Connect4 from './games/connect4/Connect4';
+import ClownTriggerfish from './games/clowntriggerfish/ClownTriggerfish';
 
 function getGameFromHash(){return resolveGame(window.location.hash);}
 
@@ -40,7 +40,7 @@ function App() {
       {currentGame === 'slippedmymind' && <SlippedMyMind onExit={handleExit} />}
       {currentGame === 'archerfish'    && <Archerfish    onExit={handleExit} />}
       {currentGame === 'wordwager'     && <WordWager     onExit={handleExit} />}
-      {currentGame === 'connect4'      && <Connect4      onExit={handleExit} />}
+      {currentGame === 'clowntriggerfish'      && <ClownTriggerfish      onExit={handleExit} />}
       {!currentGame && <HomeScreen onSelectGame={handleSelectGame} />}
     </div>
   );
