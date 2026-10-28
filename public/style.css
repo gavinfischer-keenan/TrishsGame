@@ -72,3 +72,9 @@ main :is(h1,h2)[id]{scroll-margin-top:24px}
  .page-section-nav{top:auto;transform:none;max-height:none;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;gap:8px;scrollbar-width:thin}
  .page-section-nav a{flex:0 0 auto;max-width:230px}
 }
+
+.utility-hero-logo{float:right;object-fit:contain;margin:0 0 24px 30px;width:180px;height:180px}
+.evidence-appendix{padding:40px 0}.evidence-appendix details{border:1px solid #dce5e9;padding:18px;margin:16px 0;border-radius:6px;overflow-wrap:anywhere}.evidence-appendix summary{cursor:pointer}.evidence-appendix .prose{white-space:pre-wrap}.evidence-appendix details[hidden]{display:none}.evidence-appendix small{color:#475b63}.appendix-controls{display:flex;flex-wrap:wrap;gap:20px;align-items:end;margin:28px 0}.appendix-controls label{display:grid;gap:8px}.appendix-controls input,.appendix-controls select{font:inherit;padding:10px;max-width:100%;border:1px solid #cbd6d9;background:#fff;color:#17243d}
+@media(max-width:700px){.utility-hero-logo{float:none;margin:0 0 20px;width:140px;height:140px}}
+
+footer{flex-wrap:wrap;gap:12px}.privacy-disclosure{font-size:12px}.privacy-disclosure a{text-decoration:underline}
