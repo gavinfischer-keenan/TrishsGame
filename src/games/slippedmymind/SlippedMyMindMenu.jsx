@@ -25,7 +25,9 @@ const DemoBall = ({ col, size = 50 }) => (
 const SlippedMyMindMenu = ({ onPlay, onBack }) => (
   <div className="smm-menu">
     <div className="smm-menu-content">
-      <button className="btn-back-home" onClick={onBack}>← Back to Games</button>
+      <div className="game-menu-top">
+        <button type="button" className="btn-back-home" onClick={onBack}>← Back to Games</button>
+      </div>
 
       {/* Decorative balls */}
       <div className="smm-menu-hero">
