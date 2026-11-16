@@ -6,15 +6,11 @@ import RiverGame from './RiverGame';
  * BuildMeARiver.jsx
  * Top-level wrapper for the Build Me a River game.
  * Manages navigation between level-select and playing.
- *
- * Props:
- *   onExit - () => void  (return to Trish's Games home)
  */
-
-const BuildMeARiver = ({ onExit }) => {
-  const [screen, setScreen] = useState('level-select'); // 'level-select' | 'playing'
+const BuildMeARiver = ({ settings, onExit, onRecordResult }) => {
+  const [screen, setScreen] = useState('level-select');
   const [selectedLevel, setSelectedLevel] = useState(null);
-  const [selectedSize, setSelectedSize] = useState('stream');
+  const [selectedSize, setSelectedSize] = useState(() => settings?.defaultRiverSize || 'stream');
 
   const handleSelectLevel = (level, sizeName) => {
     setSelectedLevel(level);
@@ -32,13 +28,16 @@ const BuildMeARiver = ({ onExit }) => {
       <RiverGame
         level={selectedLevel}
         sizeName={selectedSize}
+        settings={settings}
         onExit={handleExitGame}
+        onRecordResult={onRecordResult}
       />
     );
   }
 
   return (
     <LevelSelect
+      initialSize={selectedSize}
       onSelectLevel={handleSelectLevel}
       onBack={onExit}
     />

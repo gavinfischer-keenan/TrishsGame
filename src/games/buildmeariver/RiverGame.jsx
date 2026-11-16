@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react';
 import RiverBoard from './RiverBoard';
 import TileOffer from './TileOffer';
+import ConfettiBurst from '../../components/ConfettiBurst';
+import ShareResultButton from '../../components/ShareResultButton';
+import { playTone } from '../../utils/storage';
 import {
   buildInitialGrid,
   computeOpenEnds,
@@ -12,20 +15,7 @@ import {
 } from './engine/RiverLogic';
 import { SIZE_MAP } from './engine/RiverLevels';
 
-/**
- * RiverGame.jsx
- * Orchestrates a single round of Build Me a River.
- *
- * Placement flow (per click):
- *   1. processTilePlacement() — computes redirect tile if adjacent to tree/house,
- *      places it, applies obstacle effects (saturation / connection / lake fill).
- *   2. checkWin() — BFS through tiles, connected houses, filled lakes.
- *   3. computeOpenEnds() — includes house/lake outlets.
- *   4. checkLoss() — if no candidates remain.
- *   5. generateOffer() — guaranteed 3 playable tiles.
- */
-
-const RiverGame = ({ level, sizeName, onExit }) => {
+const RiverGame = ({ level, sizeName, settings, onExit, onRecordResult }) => {
   const gridSize = SIZE_MAP[sizeName] || 16;
 
   const initState = () => {
@@ -42,77 +32,106 @@ const RiverGame = ({ level, sizeName, onExit }) => {
       isWon: false,
       isLost: isGameOver,
       tilesPlaced: 0,
-      lastRedirected: false, // whether the last placement was auto-redirected
+      lastRedirected: false,
     };
   };
 
   const [state, setState] = useState(initState);
 
-  const handleSelectTile = useCallback((tileId) => {
-    setState(prev => {
-      if (!tileId) return { ...prev, selectedTile: null, validCells: new Set() };
-      const validCells = getValidCells(tileId, prev.openEnds, prev.grid, gridSize);
-      return { ...prev, selectedTile: tileId, validCells };
-    });
-  }, [gridSize]);
+  const handleSelectTile = useCallback(
+    (tileId) => {
+      playTone('click', settings?.soundEnabled);
+      setState((prev) => {
+        if (!tileId) return { ...prev, selectedTile: null, validCells: new Set() };
+        const validCells = getValidCells(tileId, prev.openEnds, prev.grid, gridSize);
+        return { ...prev, selectedTile: tileId, validCells };
+      });
+    },
+    [gridSize, settings?.soundEnabled]
+  );
 
-  const handleCellClick = useCallback((row, col) => {
-    setState(prev => {
-      if (!prev.selectedTile) return prev;
-      if (!prev.validCells.has(`${row},${col}`)) return prev;
+  const handleCellClick = useCallback(
+    (row, col) => {
+      setState((prev) => {
+        if (!prev.selectedTile) return prev;
+        if (!prev.validCells.has(`${row},${col}`)) return prev;
 
-      // ── 1. Place tile (with possible redirect) ──────────────────────────
-      const { grid: newGrid, actualTileId } = processTilePlacement(
-        prev.grid, prev.selectedTile, row, col, prev.openEnds, gridSize
-      );
-      const wasRedirected = actualTileId !== prev.selectedTile;
-      const newTilesPlaced = prev.tilesPlaced + 1;
+        const { grid: newGrid, actualTileId } = processTilePlacement(
+          prev.grid,
+          prev.selectedTile,
+          row,
+          col,
+          prev.openEnds,
+          gridSize
+        );
+        const wasRedirected = actualTileId !== prev.selectedTile;
+        const newTilesPlaced = prev.tilesPlaced + 1;
 
-      // ── 2. Win check ────────────────────────────────────────────────────
-      const won = checkWin(newGrid, level, gridSize, prev.startOpenEnd);
-      if (won) {
+        const won = checkWin(newGrid, level, gridSize, prev.startOpenEnd);
+        if (won) {
+          playTone('win', settings?.soundEnabled);
+          onRecordResult?.('buildmeariver', { won: true });
+          return {
+            ...prev,
+            grid: newGrid,
+            isWon: true,
+            selectedTile: null,
+            validCells: new Set(),
+            tilesPlaced: newTilesPlaced,
+            lastRedirected: wasRedirected,
+          };
+        }
+
+        const newOpenEnds = computeOpenEnds(newGrid, [prev.startOpenEnd], gridSize);
+
+        const lost = checkLoss(newOpenEnds, newGrid, gridSize);
+        if (lost) {
+          playTone('lose', settings?.soundEnabled);
+          onRecordResult?.('buildmeariver', { won: false });
+          return {
+            ...prev,
+            grid: newGrid,
+            openEnds: newOpenEnds,
+            isLost: true,
+            selectedTile: null,
+            validCells: new Set(),
+            tilesPlaced: newTilesPlaced,
+            lastRedirected: wasRedirected,
+          };
+        }
+
+        const { offer, isGameOver } = generateOffer(newOpenEnds, newGrid, gridSize);
+        if (isGameOver) {
+          playTone('lose', settings?.soundEnabled);
+          onRecordResult?.('buildmeariver', { won: false });
+          return {
+            ...prev,
+            grid: newGrid,
+            openEnds: newOpenEnds,
+            offer: [],
+            isLost: true,
+            selectedTile: null,
+            validCells: new Set(),
+            tilesPlaced: newTilesPlaced,
+            lastRedirected: wasRedirected,
+          };
+        }
+
+        playTone('hit', settings?.soundEnabled);
         return {
-          ...prev, grid: newGrid, isWon: true,
-          selectedTile: null, validCells: new Set(),
-          tilesPlaced: newTilesPlaced, lastRedirected: wasRedirected,
+          ...prev,
+          grid: newGrid,
+          openEnds: newOpenEnds,
+          offer,
+          selectedTile: null,
+          validCells: new Set(),
+          tilesPlaced: newTilesPlaced,
+          lastRedirected: wasRedirected,
         };
-      }
-
-      // ── 3. Recompute open ends (includes house/lake outlets now) ────────
-      const newOpenEnds = computeOpenEnds(newGrid, [prev.startOpenEnd], gridSize);
-
-      // ── 4. Loss check ───────────────────────────────────────────────────
-      const lost = checkLoss(newOpenEnds, newGrid, gridSize);
-      if (lost) {
-        return {
-          ...prev, grid: newGrid, openEnds: newOpenEnds,
-          isLost: true, selectedTile: null, validCells: new Set(),
-          tilesPlaced: newTilesPlaced, lastRedirected: wasRedirected,
-        };
-      }
-
-      // ── 5. New offer ────────────────────────────────────────────────────
-      const { offer, isGameOver } = generateOffer(newOpenEnds, newGrid, gridSize);
-      if (isGameOver) {
-        return {
-          ...prev, grid: newGrid, openEnds: newOpenEnds, offer: [],
-          isLost: true, selectedTile: null, validCells: new Set(),
-          tilesPlaced: newTilesPlaced, lastRedirected: wasRedirected,
-        };
-      }
-
-      return {
-        ...prev,
-        grid: newGrid,
-        openEnds: newOpenEnds,
-        offer,
-        selectedTile: null,
-        validCells: new Set(),
-        tilesPlaced: newTilesPlaced,
-        lastRedirected: wasRedirected,
-      };
-    });
-  }, [level, gridSize]);
+      });
+    },
+    [level, gridSize, settings?.soundEnabled, onRecordResult]
+  );
 
   const handleRestart = () => setState(initState());
 
@@ -120,14 +139,16 @@ const RiverGame = ({ level, sizeName, onExit }) => {
 
   return (
     <div className="river-game-container">
+      <ConfettiBurst active={isWon} reducedMotion={settings?.reducedMotion} />
+
       <header className="river-game-header">
-        <button className="btn-exit" onClick={onExit}>← Exit</button>
+        <button type="button" className="btn-exit" onClick={onExit}>← Exit</button>
         <div className="river-game-title">
-          <span className="river-level-badge">Level {level.id}</span>
+          <span className="river-level-badge">{level.badge || `Level ${level.id}`}</span>
           <span className="river-level-name">{level.label}</span>
         </div>
         <div className="river-tiles-count">
-          Tiles placed: <strong>{tilesPlaced}</strong>
+          Tiles: <strong>{tilesPlaced}</strong>
           {lastRedirected && <span className="redirect-notice"> ↩ redirected</span>}
         </div>
       </header>
@@ -153,31 +174,34 @@ const RiverGame = ({ level, sizeName, onExit }) => {
         )}
       </div>
 
-      {/* Win overlay */}
       {isWon && (
         <div className="river-overlay win-overlay">
           <div className="overlay-card">
             <div className="overlay-icon">🎉</div>
             <h2>River Complete!</h2>
-            <p>You connected the flow in <strong>{tilesPlaced}</strong> tiles.</p>
+            <p>You connected the flow on <strong>{level.label}</strong> ({sizeName}) in <strong>{tilesPlaced}</strong> tiles.</p>
+            <ShareResultButton
+              title="🐟 Mudskipper · Build Me a River"
+              summary={`Completed "${level.label}" (${gridSize}×${gridSize}) using ${tilesPlaced} river tiles!`}
+              urlHash="buildmeariver"
+            />
             <div className="overlay-actions">
-              <button className="btn-primary" onClick={handleRestart}>Play Again</button>
-              <button className="btn-secondary" onClick={onExit}>Level Select</button>
+              <button type="button" className="btn-primary" onClick={handleRestart}>Play Again</button>
+              <button type="button" className="btn-secondary" onClick={onExit}>Level Select</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Loss overlay */}
       {isLost && !isWon && (
         <div className="river-overlay loss-overlay">
           <div className="overlay-card">
             <div className="overlay-icon">🌊</div>
             <h2>River Blocked!</h2>
-            <p>No more tiles can be placed. The river has nowhere to go.</p>
+            <p>No more tiles can be placed after {tilesPlaced} moves. Try another route!</p>
             <div className="overlay-actions">
-              <button className="btn-primary" onClick={handleRestart}>Try Again</button>
-              <button className="btn-secondary" onClick={onExit}>Level Select</button>
+              <button type="button" className="btn-primary" onClick={handleRestart}>Try Again</button>
+              <button type="button" className="btn-secondary" onClick={onExit}>Level Select</button>
             </div>
           </div>
         </div>

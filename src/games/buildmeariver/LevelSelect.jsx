@@ -1,29 +1,23 @@
 import { useState } from 'react';
-import { LEVELS } from './engine/RiverLevels';
-import { SIZE_LABELS } from './engine/RiverLevels';
+import { LEVELS, SIZE_LABELS } from './engine/RiverLevels';
 
 /**
  * LevelSelect.jsx
- * The level selection screen for Build Me a River.
- *
- * Props:
- *   onSelectLevel - (level, sizeName) => void
- *   onBack        - () => void  — returns to home screen
+ * Level and grid-scale selection screen for Build Me a River.
  */
-
-const LevelSelect = ({ onSelectLevel, onBack }) => {
-  const [sizeName, setSizeName] = useState('stream');
+const LevelSelect = ({ initialSize = 'stream', onSelectLevel, onBack }) => {
+  const [sizeName, setSizeName] = useState(initialSize);
 
   return (
     <div className="river-level-select">
       <header className="river-ls-header">
-        <button className="btn-back-home" onClick={onBack}>← Back to Games</button>
+        <button type="button" className="btn-back-home" onClick={onBack}>← Back to Games</button>
         <div className="river-title-group">
           <img className="namesake-menu-logo" src="/brand/mudskipper-logo-v2.jpg" alt="Mudskipper logo" />
           <h2 className="namesake-animal">Mudskipper</h2>
           <h1 className="river-title">Build Me a River</h1>
           <a className="namesake-about" href="/about/mudskipper/">About the Fish →</a>
-          <p className="river-subtitle">Route the flow. Beat the land.</p>
+          <p className="river-subtitle">Route the flow from spring to sea around rocks, houses, trees, and lakes.</p>
         </div>
       </header>
 
@@ -33,6 +27,7 @@ const LevelSelect = ({ onSelectLevel, onBack }) => {
           {SIZE_LABELS.map(({ key, label, subtitle }) => (
             <button
               key={key}
+              type="button"
               className={`btn-river-size ${sizeName === key ? 'active' : ''}`}
               onClick={() => setSizeName(key)}
             >
@@ -46,29 +41,19 @@ const LevelSelect = ({ onSelectLevel, onBack }) => {
       <section className="river-levels-section">
         <h3 className="section-label">Choose a Level</h3>
         <div className="river-level-grid">
-          {LEVELS.map(level => (
+          {LEVELS.map((level) => (
             <button
               key={level.id}
-              className={`river-level-card ${level.comingSoon ? 'coming-soon' : ''}`}
-              onClick={() => !level.comingSoon && onSelectLevel(level, sizeName)}
-              disabled={!!level.comingSoon}
+              type="button"
+              className="river-level-card"
+              onClick={() => onSelectLevel(level, sizeName)}
             >
-              <div className="level-number">Level {level.id}</div>
+              <div className="level-number">{level.badge || `Level ${level.id}`}</div>
               <div className="level-name">{level.label}</div>
               <div className="level-desc">{level.description}</div>
-              {level.comingSoon && (
-                <div className="coming-soon-badge">🔒 Coming Soon</div>
-              )}
+              <div className="level-play-cue">Play Level →</div>
             </button>
           ))}
-
-          {/* Level Editor placeholder */}
-          <button className="river-level-card coming-soon level-editor-card" disabled>
-            <div className="level-number">✏️</div>
-            <div className="level-name">Level Editor</div>
-            <div className="level-desc">Design your own river puzzle.</div>
-            <div className="coming-soon-badge">🔒 Coming Soon</div>
-          </button>
         </div>
       </section>
     </div>

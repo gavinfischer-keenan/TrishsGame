@@ -1,96 +1,52 @@
-# Trish’s Games — public browser arcade
+# Trish's Games — Public Browser Arcade
 
-Live: https://games.11mosswood.us/ . Six games, all computed in the visitor’s browser. Direct BrickSmack: https://games.11mosswood.us/#bricksmack . Source code is linked from the catalog. Names and fish logos will be added later.
-
-Build and installable/offline PWA instructions: [DEPLOYMENT.md](DEPLOYMENT.md). Run `npm ci`, `npm run build`, `npm test`; only serve dist/. Word Wager is play money with no purchases or payouts.
-
-# Trish's Games
-
-Welcome to **Trish's Games** — a premium, modern web-based gaming application hosting a collection of uniquely crafted games. Built with React, Vite, and custom Vanilla CSS.
+Live catalog: https://games.11mosswood.us/ (also featured on [tripofisch.com](https://tripofisch.com/#games-layer)).  
+Six self-contained marine-themed games computed 100% locally in your browser — no backend, accounts, ads, or gameplay network requests. Word Wager uses play money only with no purchases or payouts.
 
 ---
 
-## 🎮 The Games Collection
+## 🎮 The Six Games
 
-### 1. BrickSmack
-Stack, clear, and score in this premium block puzzle experience. Drop colorful blocks onto the grid, complete rows and columns, and aim for high scores.
-* **Play Normal**: The classic block puzzle experience.
-* **Color Coordinated**: Clearing lines of the same color awards massive score multipliers.
-* **Colorfully Rotate on This**: Adds block rotation (via Spacebar or on-screen buttons) and rewards massive color coordination bonuses.
-* **Features**: Multi-size grids (8x8, 16x16), custom smooth drag-and-drop mechanics, predictive snap shadows, and irregular block shapes.
-
-### 2. Build Me a River
-A strategic puzzle where you route the flow of water from a starting point to an endpoint. 
-* **Mechanics**: Place river tiles to build a flowing path. You are given 3 playable tiles to choose from at any given time.
-* **Obstacles**: Navigate around impassable Rocks, supply water to Houses and Trees (which automatically redirect your placed tiles), and fill expansive Lakes that act as huge multi-directional water junctions.
-* **Level System**: Play through multiple predefined levels scaling from 16x16 up to expansive 64x64 flood plains.
-
-### 3. Slipped My Mind
-A modern take on the classic Slipped My Mind code-breaking game.
-* **Gameplay**: The computer chooses a secret 5-ball code out of 6 possible vibrant colors.
-* **Deduction**: You have 15 guesses to crack the code.
-* **Feedback**: After each guess, the game tells you how many balls are the right color and in the right place, and how many are the right color but in the wrong place.
-* **Hint System**: Use hints at the cost of additional turns to deduce the right placements.
-
-### 4. Number Drawing
-A logic puzzle that blends Nonograms with arithmetic to reconstruct ASCII art masterpieces.
-* **Mechanics**: You are presented with row and column segment sums, alongside faint visual blob guides.
-* **Deduction**: Use the intersection of row/column sums and contiguous blob shapes to deduce the exact hidden numbers across the grid.
-* **Level Editor**: Contains a built-in text-based level editor allowing you to paste any ASCII art numeric grid to generate custom puzzles on the fly.
+| # | Game | Marine Identity | Direct Hash | Description |
+|---|------|-----------------|-------------|-------------|
+| **1** | **BrickSmack** | Pistol Shrimp | `#bricksmack` | Drop blocks onto `8×8` or `16×16` grids to clear rows and columns across Normal, Color Coordinated, and Rotation modes. |
+| **2** | **Build Me a River** | Mudskipper | `#river` | Route flowing water from spring to sea around rocks, farmhouses, trees, and lakes across 4 levels and 3 map scales (`16×16` to `64×64`). |
+| **3** | **Slipped My Mind** | Peacock Mantis Shrimp | `#mind` | Crack the hidden 5-ball color code within 15 turns using exact and close feedback pegs plus tactical hints. |
+| **4** | **Fleet Tactics** | Archerfish | `#archerfish` | Deploy your 5-ship fleet (drag, drop, Spacebar rotate) and sink the enemy armada before yours is sunk. |
+| **5** | **Word Wager** | Alphabet Cone Snail | `#wordwager` | Uncover hidden words from definition clues using **American English** or **World & Regional English** decks, play-money wagers, and All-In sprints. |
+| **6** | **Four in a Row** | Clown Triggerfish | `#clowntriggerfish` | Drop discs against an alpha-beta minimax AI opponent and connect four first. |
 
 ---
 
-## ✨ Application Features
+## ✨ Key Features
 
-* **Monorepo Architecture**: A centralized home screen that acts as the entry point to all games.
-* **Ultra-Premium Aesthetics**: Full glassmorphism design, Outfit font typography, customized dark mode gradients, dynamic selection rings, and fluid micro-animations across all menus and games.
-* **Fully Responsive**: Playable on desktop and mobile devices.
-
----
-
-## 🛠️ Tech Stack
-
-* **Frontend**: React 19, Vanilla CSS
-* **Build System**: Vite 8
-* **Code Quality**: ESLint 10
+- **Command Palette (`Ctrl/Cmd + K`)**: Instant search across games, recent items, animal profiles, scoreboard stats, settings, and quick actions.
+- **Keyboard Shortcuts (`?`)**: 10 fast navigation & gameplay shortcuts with automatic protection while typing in inputs.
+- **Unified Settings & Scoreboard**: Grouped gameplay defaults, synthesized Web Audio effects, Reduced Motion, High-Contrast boards, and local personal-best tracking.
+- **Offline-Ready PWA**: Content-hashed service worker generated at build time (`scripts/build-offline.mjs`) with zero external font or API dependencies.
+- **Responsive Across Viewports**: Tested and verified with zero horizontal overflow at `360px`, `768px`, `1024px`, and `1440px`.
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Tech Stack & Commands
 
-### Prerequisites
+- **Frontend**: React 19, Vanilla CSS, Web Audio API
+- **Build & Tooling**: Vite 8, ESLint 10, Node 22+
 
-* Node.js (version 18 or higher recommended)
-* npm (comes bundled with Node.js)
-
-### Installation
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Start the local development server:
-   ```bash
-   npm run dev
-   ```
-
-3. Open your browser and navigate to `http://localhost:5173`.
-
-### Building for Production
-
-Compile an optimized production build:
 ```bash
-npm run build
-```
-
-Preview the production build locally:
-```bash
-npm run preview
+npm ci           # Install dependencies
+npm run dev      # Start local dev server (http://localhost:5173)
+npm run lint     # Run ESLint across src/ and scripts/
+npm run build    # Build dist/ and generate dist/sw.js
+npm test         # Run route, manifest, CSP, and SW verification (scripts/verify-build.mjs)
+npm run preview  # Preview production dist/ locally
 ```
 
 ---
 
-## ⚖️ License
+## 📚 Documentation
 
-Private repository. All rights reserved.
+- [**Architecture & Repository Layout**](docs/ARCHITECTURE.md) — Directory structure, hash routing, storage keys, and shortcut rules.
+- [**Deployment & Hosting Guide**](docs/DEPLOYMENT.md) — Static `dist/` deployment, PWA service worker behavior, CSP headers, and Docker notes.
+- [**UX & Responsive Audit**](docs/UX-AND-RESPONSIVE-AUDIT.md) — Details on Word Wager cleanup, responsive fixes, empty states, and settings.
+- [**Archive**](docs/archive/README-legacy.md) — Superseded documentation and archived v1 brand drafts (`docs/archive/brand-v1/`).
